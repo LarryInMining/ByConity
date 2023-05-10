@@ -1886,7 +1886,7 @@ std::shared_ptr<PrimaryIndexCache> Context::getPrimaryIndexCache() const
     return shared->primary_index_cache;
 }
 
-void Context::dropPrimaryIndexCache() const 
+void Context::dropPrimaryIndexCache() const
 {
     if (shared->primary_index_cache)
         shared->primary_index_cache->reset();
@@ -2155,14 +2155,16 @@ ThreadPool & Context::getLocalDiskCacheThreadPool() const
     return *shared->local_disk_cache_thread_pool;
 }
 
+void Context::initLocalDiskCacheEvictThreadPool()
+{
+    shared->local_disk_cache_evict_thread_pool.emplace(
+        settings.local_disk_cache_evict_thread_pool_size,
+        settings.local_disk_cache_evict_thread_pool_size,
+        settings.local_disk_cache_evict_thread_pool_size * 100);
+}
+
 ThreadPool & Context::getLocalDiskCacheEvictThreadPool() const
 {
-    auto lock = getLock();
-    if (!shared->local_disk_cache_evict_thread_pool)
-        shared->local_disk_cache_evict_thread_pool.emplace(
-            settings.local_disk_cache_evict_thread_pool_size,
-            settings.local_disk_cache_evict_thread_pool_size,
-            settings.local_disk_cache_evict_thread_pool_size * 100);
     return *shared->local_disk_cache_evict_thread_pool;
 }
 

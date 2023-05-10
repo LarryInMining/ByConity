@@ -986,6 +986,8 @@ public:
     BackgroundSchedulePool & getTopologySchedulePool() const;
 
     ThreadPool & getLocalDiskCacheThreadPool() const;
+
+    void initLocalDiskCacheEvictThreadPool();
     ThreadPool & getLocalDiskCacheEvictThreadPool() const;
     ThrottlerPtr getDiskCacheThrottler() const;
 

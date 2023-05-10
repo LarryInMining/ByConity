@@ -1170,7 +1170,7 @@ int Server::main(const std::vector<std::string> & /*args*/)
     }
 
 #endif
-
+    global_context->initLocalDiskCacheEvictThreadPool();
     try
     {
         DiskCacheFactory::instance().init(*global_context);
