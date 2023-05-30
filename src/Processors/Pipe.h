@@ -28,6 +28,7 @@
 #include <Access/EnabledQuota.h>
 #include <DataStreams/SizeLimits.h>
 #include <Storages/TableLockHolder.h>
+#include <Interpreters/Cache/QueryCache.h> /// nested classes such as QC::Writer can't be fwd declared
 
 namespace DB
 {
@@ -93,6 +94,13 @@ public:
     void addTransform(ProcessorPtr transform);
     void addTransform(ProcessorPtr transform, OutputPort * totals, OutputPort * extremes);
     void addTransform(ProcessorPtr transform, InputPort * totals, InputPort * extremes);
+
+    void readFromQueryCache(
+        std::unique_ptr<SourceFromChunks> source,
+        std::unique_ptr<SourceFromChunks> source_totals,
+        std::unique_ptr<SourceFromChunks> source_extremes);
+    void addQueryCacheTransform(std::shared_ptr<QueryCache::Writer> query_cache_writer);
+    void finalizeWriteInQueryCache();
 
     enum class StreamType
     {

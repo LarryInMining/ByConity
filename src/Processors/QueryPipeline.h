@@ -24,10 +24,12 @@
 #include <DataStreams/IBlockInputStream.h>
 #include <DataStreams/IBlockOutputStream.h>
 #include <Processors/Executors/PipelineExecutor.h>
+#include <Processors/Sources/SourceFromChunks.h>
 #include <Processors/IProcessor.h>
 #include <Processors/Pipe.h>
 #include <Storages/IStorage_fwd.h>
 #include <Storages/TableLockHolder.h>
+#include <Interpreters/Cache/QueryCache.h> /// nested classes such as QC::Writer can't be fwd declared
 
 namespace DB
 {
@@ -153,6 +155,14 @@ public:
     /// For compatibility with IBlockInputStream.
     void setProgressCallback(const ProgressCallback & callback);
     void setProcessListElement(QueryStatus * elem);
+
+    void writeResultIntoQueryCache(std::shared_ptr<QueryCache::Writer> query_cache_writer);
+    void readFromQueryCache(
+        std::unique_ptr<SourceFromChunks> source,
+        std::unique_ptr<SourceFromChunks> source_totals,
+        std::unique_ptr<SourceFromChunks> source_extremes);
+
+    void finalizeWriteInQueryCache();
 
     /// Recommend number of threads for pipeline execution.
     size_t getNumThreads() const

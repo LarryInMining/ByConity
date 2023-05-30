@@ -569,4 +569,24 @@ Processors QueryPipelineProcessorsCollector::detachProcessors(size_t group)
     return res;
 }
 
+void QueryPipeline::writeResultIntoQueryCache(std::shared_ptr<QueryCache::Writer> query_cache_writer)
+{
+    assert(pipeline.getNumStreams() > 0);
+    pipe.addQueryCacheTransform(std::move(query_cache_writer));
 }
+
+void QueryPipeline::finalizeWriteInQueryCache()
+{
+    pipe.finalizeWriteInQueryCache();
+}
+
+void QueryPipeline::readFromQueryCache(
+        std::unique_ptr<SourceFromChunks> source,
+        std::unique_ptr<SourceFromChunks> source_totals,
+        std::unique_ptr<SourceFromChunks> source_extremes)
+{
+    pipe.readFromQueryCache(std::move(source), std::move(source_totals), std::move(source_extremes));
+}
+
+}
+

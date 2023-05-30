@@ -471,7 +471,7 @@ void CnchWorkerServiceImpl::preloadDataParts(
     catch (...)
     {
         tryLogCurrentException(log, __PRETTY_FUNCTION__);
-        RPCHelpers::handleException(response->mutable_exception());  
+        RPCHelpers::handleException(response->mutable_exception());
     }
 }
 
