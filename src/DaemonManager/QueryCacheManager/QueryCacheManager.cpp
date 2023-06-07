@@ -20,7 +20,7 @@ namespace DB::DaemonManager
 
 CacheInfo QueryCacheManager::getOrInsertCacheInfo(const String & origin_server, const UUID uuid, const TxnTimestamp query_txn_ts)
 {
-    const UUIDToCacheInfoMapPart & map_part = uuid_map[getFirstLevelIdx(uuid)];
+    UUIDToCacheInfoMapPart & map_part = uuid_map[getFirstLevelIdx(uuid)];
     std::lock_guard lock{map_part.mutex};
     auto it = map_part.map.find(uuid);
     if (it != map_part.map.end() && (!alive_servers.contains(it->second.server_address)))
