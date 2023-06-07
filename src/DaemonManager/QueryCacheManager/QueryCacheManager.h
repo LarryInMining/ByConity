@@ -19,6 +19,7 @@
 #include <Transaction/TxnTimestamp.h>
 #include <unordered_map>
 #include <mutex>
+#include <array>
 
 namespace DB::DaemonManager
 {
