@@ -37,7 +37,7 @@ class QueryCacheManager
 public:
     CacheInfo getOrInsertCacheInfo(const String & origin_server, const UUID, const TxnTimestamp query_txn_ts);
     void setLastUpdateTs(const UUID, const TxnTimestamp update_ts);
-    void updateWithServerInfo(const std::vector<String> & alive_server);
+    void updateAliveServers(std::vector<String> alive_server);
 private:
     struct UUIDToCacheInfoMapPart
     {

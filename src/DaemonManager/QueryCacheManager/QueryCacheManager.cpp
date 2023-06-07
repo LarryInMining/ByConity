@@ -24,12 +24,12 @@ CacheInfo QueryCacheManager::getOrInsertCacheInfo(const String & origin_server, 
     std::lock_guard lock{map_part.mutex};
     auto it = map_part.map.find(uuid);
     if (it != map_part.map.end() && (!alive_servers.contains(it->second.server_address)))
-        it.second.server_address = origin_server;
+        it->second.server_address = origin_server;
 
     if (it == map_part.map.end())
     {
         /// create cache at server where the original query come from
-        auto res = map_part.insert(std::make_pair(uuid, CacheInfo{origin_server, query_txn_ts}));
+        auto res = map_part.map.insert(std::make_pair(uuid, CacheInfo{origin_server, query_txn_ts}));
         it = res.first;
     }
 
@@ -38,7 +38,7 @@ CacheInfo QueryCacheManager::getOrInsertCacheInfo(const String & origin_server, 
 
 void QueryCacheManager::setLastUpdateTs(const UUID uuid, const TxnTimestamp update_ts)
 {
-    const UUIDToCacheInfoMapPart & map_part = uuid_map[getFirstLevelIdx(uuid)];
+    UUIDToCacheInfoMapPart & map_part = uuid_map[getFirstLevelIdx(uuid)];
     std::lock_guard lock{map_part.mutex};
 
     auto it = map_part.map.find(uuid);
@@ -58,6 +58,11 @@ bool QueryCacheManager::AliveServers::contains(const String & s)
     std::lock_guard lock{alive_server_mutex};
     auto it = std::find(alive_servers.begin(), alive_servers.end(), s);
     return (it != alive_servers.end());
+}
+
+void QueryCacheManager::updateAliveServers(std::vector<String> servers)
+{
+    alive_servers.set(std::move(servers));
 }
 
 }
