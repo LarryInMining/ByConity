@@ -763,6 +763,10 @@ static std::tuple<ASTPtr, BlockIO> executeQueryImpl(
                 && (can_use_query_cache && settings.enable_reads_from_query_cache)
                 && (res.pipeline.getNumStreams() > 0))
             {
+                /*
+                DaemonManagerClient
+                */
+
                 QueryCache::Key key(
                     ast, res.pipeline.getHeader(),
                     context->getUserName(), /*dummy for is_shared*/ false,

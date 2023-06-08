@@ -74,4 +74,19 @@ bool DaemonJobQueryCacheManager::executeImpl()
     cache_manager.setAliveServers(server_addresses);
 }
 
+QueryCacheManager * lookforQueryCacheManager(std::vector<DaemonJobPtr> & local_daemon_jobs)
+{
+    QueryCacheManager * res{nullptr};
+    for (DaemonJobPtr & daemon_job : local_daemon_jobs)
+    {
+        if (daemon_job->getType() == CnchBGThreadType::QueryCacheManager)
+        {
+            DaemonJobQueryCacheManager * j = reinterpret_cast<DaemonJobQueryCacheManager *>(daemon_job.get());
+            res = j->getQueryCacheManager();
+        }
+    }
+    return res;
+}
+
+
 }

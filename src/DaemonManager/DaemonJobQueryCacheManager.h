@@ -36,4 +36,6 @@ private:
     std::shared_ptr<CnchTopologyMaster> topology_master;
 };
 
+QueryCacheManager * lookforQueryCacheManager(std::vector<DaemonJobPtr> & local_daemon_jobs);
+
 }
