@@ -37,6 +37,24 @@ namespace ErrorCodes
 namespace DaemonManager
 {
 
+namespace
+{
+
+std::vector<ServerAddress> getServerAddressesFromHostPortVec(const HostWithPortsVec & host_ports)
+{
+    std::vector<ServerAddress> res;
+    std::transform(host_ports.begin(), host_ports.end(), std::back_inserter(res),
+        [] (const HostWithPorts & host_port)
+        {
+            return ServerAddress{host_port.getHost(), host_port.getTCPPort()};
+        }
+    );
+
+    return res;
+}
+
+}
+
 DaemonJobQueryCacheManager::DaemonJobQueryCacheManager(ContextMutablePtr global_context_)
     : DaemonJob{global_context_, CnchBGThreadType::QueryCacheManager}
 {
@@ -50,13 +68,7 @@ DaemonJobQueryCacheManager::DaemonJobQueryCacheManager(ContextMutablePtr global_
 
     HostWithPortsVec host_ports = server_topologies.back().getServerList();
 
-    std::vector<ServerAddress> server_addresses;
-    std::transform(host_ports.begin(), host_ports.end(), std::back_inserter(server_addresses),
-        [] (const HostWithPorts & host_port)
-        {
-            return ServerAddress{host_port.getHost(), host_port.getTCPPort()};
-        }
-    );
+    std::vector<ServerAddress> server_addresses = getServerAddressesFromHostPortVec(host_ports);
     cache_manager.setAliveServers(server_addresses);
 }
 
@@ -75,14 +87,7 @@ bool DaemonJobQueryCacheManager::executeImpl()
     }
 
     HostWithPortsVec host_ports = server_topologies.back().getServerList();
-
-    std::vector<ServerAddress> server_addresses;
-    std::transform(host_ports.begin(), host_ports.end(), std::back_inserter(ret),
-        [] (const HostWithPorts & host_port)
-        {
-            return {host_port.getHost(), host_port.getTCPPort()};
-        }
-    );
+    std::vector<ServerAddress> server_addresses = getServerAddressesFromHostPortVec(host_ports);
     cache_manager.setAliveServers(server_addresses);
 }
 
