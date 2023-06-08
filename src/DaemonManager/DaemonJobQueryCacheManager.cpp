@@ -69,7 +69,10 @@ bool DaemonJobQueryCacheManager::executeImpl()
 {
     std::list<CnchServerTopology> server_topologies = topology_master->getCurrentTopology();
     if (server_topologies.empty())
-        return;
+    {
+        LOG_WARNING(log, "Server topology is empty");
+        return false;
+    }
 
     HostWithPortsVec host_ports = server_topologies.back().getServerList();
 
