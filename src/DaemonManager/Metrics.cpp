@@ -57,5 +57,10 @@ namespace DB::DaemonManager::BRPCMetrics
     bvar::Adder< int > g_executeImpl_Clustering;
     bvar::Window<bvar::Adder<int>> g_executeImpl_Clustering_error_minute("DaemonManager_Internal", "executeImpl_Clustering_error", & g_executeImpl_Clustering_error, 60);
     bvar::Window<bvar::Adder<int>> g_executeImpl_Clustering_minute("DaemonManager_Internal", "executeImpl_Clustering", & g_executeImpl_Clustering, 60);
+
+    bvar::Adder< int > g_executeImpl_QueryCacheManager_error;
+    bvar::Adder< int > g_executeImpl_QueryCacheManager;
+    bvar::Window<bvar::Adder<int>> g_executeImpl_QueryCacheManager_error_minute("DaemonManager_Internal", "executeImpl_QueryCacheManager_error", & g_executeImpl_QueryCacheManager_error, 60);
+    bvar::Window<bvar::Adder<int>> g_executeImpl_QueryCacheManager_minute("DaemonManager_Internal", "executeImpl_QueryCacheManager", & g_executeImpl_QueryCacheManager, 60);
 }/// end namespace
 

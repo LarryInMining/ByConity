@@ -51,6 +51,8 @@ bvar::Adder<int> & getExecuteMetric(CnchBGThreadType type)
             return g_executeImpl_TxnGC;
         case CnchBGThreadType::Clustering:
             return g_executeImpl_Clustering;
+        case CnchBGThreadType::QueryCacheManager:
+            return g_executeImpl_QueryCacheManager;
         default:
             throw Exception(String{"No metric add for daemon job type "} + toString(type) + ", this is coding mistake", ErrorCodes::LOGICAL_ERROR);
     }

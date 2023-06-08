@@ -35,5 +35,6 @@ namespace DB::DaemonManager::BRPCMetrics
     extern bvar::Adder< int > g_executeImpl_TxnGC;
     extern bvar::Adder< int > g_executeImpl_Clustering_error;
     extern bvar::Adder< int > g_executeImpl_Clustering;
+    extern bvar::Adder< int > g_executeImpl_QueryCacheManager;
 }/// end namespace
 
