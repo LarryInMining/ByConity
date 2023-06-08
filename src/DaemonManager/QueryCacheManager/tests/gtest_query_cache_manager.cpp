@@ -14,10 +14,7 @@
  */
 
 #include <Common/tests/gtest_global_context.h>
-#include <DaemonManager/BackgroudJobExecutor.h>
-#include <DaemonManager/BackgroundJob.h>
-#include <DaemonManager/DaemonJobServerBGThread.h>
-#include <Interpreters/Context.h>
+#include <DaemonManager/QueryCacheManager/QueryCacheManager.h>
 #include <string>
 #include <gtest/gtest.h>
 
