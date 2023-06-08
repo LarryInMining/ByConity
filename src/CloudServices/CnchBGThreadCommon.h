@@ -38,9 +38,7 @@ namespace CnchBGThread
 
         GlobalGC = 20, /// reserve several entries
         TxnGC = 21,
-        DaemonMinType = GlobalGC,
-        DaemonMaxType = TxnGC,
-
+        QueryCacheManager,
         ResourceReport = 30, /// worker
         WorkerMinType = ResourceReport, /// Enum to mark start of worker types
         WorkerMaxType = ResourceReport, /// Enum to mark end of worker types
@@ -88,6 +86,8 @@ constexpr auto toString(CnchBGThreadType type)
             return "GlobalGCThread";
         case CnchBGThreadType::TxnGC:
             return "TxnGCThread";
+        case CnchBGThreadType::QueryCacheManager:
+            return "QueryCacheManager";
         case CnchBGThreadType::ResourceReport:
             return "ResourceReport";
     }
@@ -97,11 +97,6 @@ constexpr auto toString(CnchBGThreadType type)
 constexpr auto isServerBGThreadType(CnchBGThreadType t)
 {
     return CnchBGThreadType::ServerMinType <= t && t <= CnchBGThreadType::ServerMaxType;
-}
-
-constexpr auto iDaemonBGThreadType(CnchBGThreadType t)
-{
-    return CnchBGThreadType::DaemonMinType <= t && t <= CnchBGThreadType::DaemonMaxType;
 }
 
 constexpr auto toString(CnchBGThreadAction action)
@@ -134,6 +129,20 @@ constexpr auto toString(CnchBGThreadStatus status)
             return "Removed";
     }
     __builtin_unreachable();
+}
+
+QueryCacheManager * lookforQueryCacheManager(std::vector<DaemonJobPtr> & local_daemon_jobs)
+{
+    QueryCacheManager * res{nullptr};
+    for (DaemonJobPtr & daemon_job : local_daemon_jobs)
+    {
+        if (daemon_job->getType() == CnchBGThreadType::QueryCacheManager)
+        {
+            DaemonJobQueryCacheManager * j = reinterpret_cast<DaemonJobQueryCacheManager *>(daemon_job.get());
+            res = j->getQueryCacheManager();
+        }
+    }
+    return res;
 }
 
 }

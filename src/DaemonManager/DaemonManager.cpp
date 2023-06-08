@@ -142,7 +142,8 @@ std::vector<DaemonJobPtr> createLocalDaemonJobs(
 {
     std::map<std::string, unsigned int> default_config = {
         { "GLOBAL_GC", 5000},
-        { "TXN_GC", 600000}
+        { "TXN_GC", 600000},
+        { "QUERY_CACHE_MANAGER", 10000}
     };
 
     std::map<std::string, unsigned int> config = updateConfig(std::move(default_config), app_config);
@@ -161,7 +162,6 @@ std::vector<DaemonJobPtr> createLocalDaemonJobs(
     );
 
     return res;
-
 }
 
 std::unordered_map<CnchBGThreadType, DaemonJobServerBGThreadPtr> createDaemonJobsForBGThread(
@@ -272,6 +272,8 @@ int DaemonManager::main(const std::vector<std::string> &)
         }
     );
 
+    QueryCacheManager * query_cache_manager = lookforQueryCacheManager(local_daemon_jobs);
+
     auto storage_cache_size = config().getUInt("daemon_manager.storage_cache_size", 10000);
     StorageCache cache(storage_cache_size); /* Cache size = storage_cache_size, invalidate an entry every 180s if unused */
 
@@ -293,7 +295,7 @@ int DaemonManager::main(const std::vector<std::string> &)
     // launch brpc service
     int port = config().getInt("daemon_manager.port", 8090);
     std::unique_ptr<DaemonManagerServiceImpl> daemon_manager_service =
-        std::make_unique<DaemonManagerServiceImpl>(daemon_jobs_for_bg_thread_in_server);
+        std::make_unique<DaemonManagerServiceImpl>(daemon_jobs_for_bg_thread_in_server, query_cache_manager);
 
     if (server.AddService(daemon_manager_service.get(), brpc::SERVER_DOESNT_OWN_SERVICE) != 0)
     {
