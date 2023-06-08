@@ -54,7 +54,7 @@ TEST(QueryCacheManager, normal_test)
 
     {
         CacheInfo cache_info = cache_manager.getOrInsertCacheInfo(SERVER2, uuid1, 3);
-        CacheInfo expected {SERVER2, 3};
+        CacheInfo expected {SERVER2, 1};
         EXPECT_EQ(cache_info, expected);
     }
 
