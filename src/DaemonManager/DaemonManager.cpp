@@ -40,6 +40,7 @@
 #include <DaemonManager/DaemonHelper.h>
 #include <DaemonManager/DaemonManagerServiceImpl.h>
 #include <DaemonManager/FixCatalogMetaDataTask.h>
+#include <DaemonManager/QueryCacheManager/QueryCacheManager.h>
 #include <chrono>
 
 using namespace std::chrono_literals;

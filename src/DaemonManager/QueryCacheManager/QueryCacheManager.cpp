@@ -81,7 +81,7 @@ AllInfo QueryCacheManager::getAllInfo() const
     std::transform(uuid_map.begin(), uuid_map.end(), res.cache_info.begin(),
         [] (const UUIDToCacheInfoMapPart & map_part)
         {
-            std::lock_guard lock{map_part.mutext};
+            std::lock_guard lock{map_part.mutex};
             return map_part.map;
         });
 

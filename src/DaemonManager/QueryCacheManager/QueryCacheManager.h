@@ -55,6 +55,7 @@ public:
     void setLastUpdateTs(const UUID, const TxnTimestamp update_ts);
     void setAliveServers(std::vector<ServerAddress> alive_server);
 
+    static constexpr UInt64 bits_for_first_level = 4;
     struct AllInfo
     {
         std::vector<ServerAddress> alive_servers;
@@ -70,7 +71,6 @@ private:
         mutable std::mutex mutex;
     };
 
-    static constexpr UInt64 bits_for_first_level = 4;
     static inline size_t getFirstLevelIdx(const UUID & uuid)
     {
         return uuid.toUnderType().items[0] >> (64 - bits_for_first_level);
