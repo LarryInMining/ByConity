@@ -34,7 +34,7 @@ UUID uuid4 = UUID{UInt128{0, 4}};
 UUID uuid5 = UUID{UInt128{0, 5}};
 UUID uuid6 = UUID{UInt128{0, 6}};
 
-TEST(daemon_job, getUUIDsFromBackgroundJobs)
+TEST(QueryCacheManager, normal_test)
 {
     QueryCacheManager cache_manager;
     cache_manager.setAliveServers({SERVER1, SERVER2});
