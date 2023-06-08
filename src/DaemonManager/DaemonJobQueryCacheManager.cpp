@@ -22,16 +22,27 @@
 #include <Core/UUID.h>
 #include <iterator>
 
-namespace DB::DaemonManager
+namespace DB
 {
 
+namespace ErrorCodes
+{
+    extern const int FILE_DOESNT_EXIST;
+    extern const int CANNOT_OPEN_FILE;
+    extern const int SYSTEM_ERROR;
+    extern const int NOT_ENOUGH_SPACE;
+    extern const int CANNOT_KILL;
+}
+
+namespace DaemonManager
+{
 
 DaemonJobQueryCacheManager::DaemonJobQueryCacheManager(ContextMutablePtr global_context_)
-    : DaemonJobQueryCacheManager{std::move(global_context_), CnchBGThreadType::QueryCacheManager}
+    : DaemonJob{global_context_, CnchBGThreadType::QueryCacheManager}
 {
-    topology_master = global_context->getCnchTopologyMaster();
+    topology_master = global_context_->getCnchTopologyMaster();
     if (!topology_master)
-        throw Exception("Failed to get topology master", ErrorCodes::INVALID_CONFIG_PARAMETER);
+        throw Exception("Failed to get topology master", ErrorCodes::SYSTEM_ERROR);
 
     std::list<CnchServerTopology> server_topologies = topology_master->getCurrentTopology();
     if (server_topologies.empty())
@@ -43,7 +54,7 @@ DaemonJobQueryCacheManager::DaemonJobQueryCacheManager(ContextMutablePtr global_
     std::transform(host_ports.begin(), host_ports.end(), std::back_inserter(ret),
         [] (const HostWithPorts & host_port)
         {
-            return {host_port.getHost(), host_port.getTCPPort()};
+            return ServerAddress{host_port.getHost(), host_port.getTCPPort()};
         }
     );
     cache_manager.setAliveServers(server_addresses);
@@ -86,5 +97,6 @@ QueryCacheManager * lookForQueryCacheManager(std::vector<DaemonJobPtr> & local_d
     return res;
 }
 
+} /// end namespace DaemonManager
+} /// end namespace DB
 
-}

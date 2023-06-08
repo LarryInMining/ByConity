@@ -25,10 +25,7 @@ namespace DB::DaemonManager
 class DaemonJobQueryCacheManager : public DaemonJob
 {
 public:
-    DaemonJobQueryCacheManager(ContextMutablePtr global_context_)
-        : DaemonJob{std::move(global_context_), CnchBGThreadType::QueryCacheManager}
-    {}
-
+    DaemonJobQueryCacheManager(ContextMutablePtr global_context_);
     QueryCacheManager * getQueryCacheManager() { return &cache_manager; }
 protected:
     bool executeImpl() override;
