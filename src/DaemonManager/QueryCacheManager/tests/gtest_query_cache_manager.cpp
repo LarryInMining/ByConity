@@ -52,16 +52,16 @@ TEST(QueryCacheManager, normal_test)
     }
 
     {
-        const vector<ServerAddress> alive_servers = cache_manager.getAliveServers();
-        const vector<ServerAddress> expected{SERVER1, SERVER2};
+        const std::vector<ServerAddress> alive_servers = cache_manager.getAliveServers();
+        const std::vector<ServerAddress> expected{SERVER1, SERVER2};
         EXPECT_EQ(alive_servers, expected);
     }
 
     cache_manager.setAliveServers({SERVER2, SERVER3});
 
     {
-        const vector<ServerAddress> alive_servers = cache_manager.getAliveServers();
-        const vector<ServerAddress> expected{SERVER2, SERVER3};
+        const std::vector<ServerAddress> alive_servers = cache_manager.getAliveServers();
+        const std::vector<ServerAddress> expected{SERVER2, SERVER3};
         EXPECT_EQ(alive_servers, expected);
     }
 
