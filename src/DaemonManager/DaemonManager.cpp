@@ -274,7 +274,7 @@ int DaemonManager::main(const std::vector<std::string> &)
         }
     );
 
-    QueryCacheManager * query_cache_manager = lookforQueryCacheManager(local_daemon_jobs);
+    QueryCacheManager * query_cache_manager = lookForQueryCacheManager(local_daemon_jobs);
 
     auto storage_cache_size = config().getUInt("daemon_manager.storage_cache_size", 10000);
     StorageCache cache(storage_cache_size); /* Cache size = storage_cache_size, invalidate an entry every 180s if unused */
