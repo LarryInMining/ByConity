@@ -60,7 +60,7 @@ bool QueryCacheManager::AliveServers::contains(const ServerAddress & s)
     return (it != alive_servers.end());
 }
 
-void QueryCacheManager::setAliveServers(std::vector<String> servers)
+void QueryCacheManager::setAliveServers(std::vector<ServerAddress> servers)
 {
     alive_servers.set(std::move(servers));
 }
