@@ -24,13 +24,24 @@
 namespace DB::DaemonManager
 {
 
+struct ServerAddress
+{
+    String host;
+    UInt16 tcp_port;
+};
+
+inline bool operator == (const ServerAddress & lhs, const ServerAddress & rhs)
+{
+    return (lhs.host == rhs.host) && (lhs.tcp_port == rhs.tcp_port);
+}
+
 struct CacheInfo
 {
-    String server_address;
+    ServerAddress server_address;
     TxnTimestamp last_update_ts;
 };
 
-inline bool operator ==(const CacheInfo & lhs, const CacheInfo & rhs)
+inline bool operator == (const CacheInfo & lhs, const CacheInfo & rhs)
 {
     return (lhs.server_address == rhs.server_address) && (lhs.last_update_ts == rhs.last_update_ts);
 }
@@ -40,9 +51,9 @@ inline bool operator ==(const CacheInfo & lhs, const CacheInfo & rhs)
 class QueryCacheManager
 {
 public:
-    CacheInfo getOrInsertCacheInfo(const String & origin_server, const UUID, const TxnTimestamp query_txn_ts);
+    CacheInfo getOrInsertCacheInfo(const ServerAddress & origin_server, const UUID, const TxnTimestamp query_txn_ts);
     void setLastUpdateTs(const UUID, const TxnTimestamp update_ts);
-    void setAliveServers(std::vector<String> alive_server);
+    void setAliveServers(std::vector<ServerAddress> alive_server);
 private:
     struct UUIDToCacheInfoMapPart
     {
@@ -62,10 +73,10 @@ private:
     class AliveServers
     {
     public:
-        void set(std::vector<String> servers);
-        bool contains(const String & s);
+        void set(std::vector<ServerAddress> servers);
+        bool contains(const ServerAddress & s);
     private:
-        std::vector<String> alive_servers;
+        std::vector<ServerAddress> alive_servers;
         std::mutex alive_server_mutex;
     };
 

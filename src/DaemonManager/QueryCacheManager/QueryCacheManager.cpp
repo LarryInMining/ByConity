@@ -18,7 +18,7 @@
 namespace DB::DaemonManager
 {
 
-CacheInfo QueryCacheManager::getOrInsertCacheInfo(const String & origin_server, const UUID uuid, const TxnTimestamp query_txn_ts)
+CacheInfo QueryCacheManager::getOrInsertCacheInfo(const ServerAddress & origin_server, const UUID uuid, const TxnTimestamp query_txn_ts)
 {
     UUIDToCacheInfoMapPart & map_part = uuid_map[getFirstLevelIdx(uuid)];
     std::lock_guard lock{map_part.mutex};
@@ -47,13 +47,13 @@ void QueryCacheManager::setLastUpdateTs(const UUID uuid, const TxnTimestamp upda
     it->second.last_update_ts = update_ts;
 }
 
-void QueryCacheManager::AliveServers::set(std::vector<String> servers)
+void QueryCacheManager::AliveServers::set(std::vector<ServerAddress> servers)
 {
     std::lock_guard lock{alive_server_mutex};
     alive_servers = std::move(servers);
 }
 
-bool QueryCacheManager::AliveServers::contains(const String & s)
+bool QueryCacheManager::AliveServers::contains(const ServerAddress & s)
 {
     std::lock_guard lock{alive_server_mutex};
     auto it = std::find(alive_servers.begin(), alive_servers.end(), s);
