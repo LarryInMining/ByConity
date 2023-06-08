@@ -21,6 +21,7 @@ namespace DB::DaemonManager
 void registerServerBGThreads(DaemonFactory & factory);
 void registerGlobalGCDaemon(DaemonFactory & factory);
 void registerTxnGCDaemon(DaemonFactory & factory);
+void registerQueryCacheManagerDaemon(DaemonFactory & factory);
 
 void registerDaemonJobs()
 {
@@ -29,6 +30,7 @@ void registerDaemonJobs()
     registerServerBGThreads(factory);
     registerGlobalGCDaemon(factory);
     registerTxnGCDaemon(factory);
+    registerQueryCacheManagerDaemon(factory);
 }
 
 }
