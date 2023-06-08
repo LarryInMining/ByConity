@@ -60,9 +60,20 @@ bool QueryCacheManager::AliveServers::contains(const ServerAddress & s)
     return (it != alive_servers.end());
 }
 
+std::vector<ServerAddress> QueryCacheManager::AliveServers::clone() const
+{
+    std::lock_guard lock{alive_server_mutex};
+    return alive_servers;
+}
+
 void QueryCacheManager::setAliveServers(std::vector<ServerAddress> servers)
 {
     alive_servers.set(std::move(servers));
+}
+
+std::vector<ServerAddress> QueryCacheManager::getAliveServer() const
+{
+    return alive_servers.clone();
 }
 
 }

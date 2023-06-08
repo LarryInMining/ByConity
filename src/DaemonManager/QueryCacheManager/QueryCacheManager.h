@@ -54,6 +54,7 @@ public:
     CacheInfo getOrInsertCacheInfo(const ServerAddress & origin_server, const UUID, const TxnTimestamp query_txn_ts);
     void setLastUpdateTs(const UUID, const TxnTimestamp update_ts);
     void setAliveServers(std::vector<ServerAddress> alive_server);
+    std::vector<ServerAddress> getAliveServer();
 private:
     struct UUIDToCacheInfoMapPart
     {
@@ -75,9 +76,10 @@ private:
     public:
         void set(std::vector<ServerAddress> servers);
         bool contains(const ServerAddress & s);
+        std::vector<ServerAddress> clone() const;
     private:
         std::vector<ServerAddress> alive_servers;
-        std::mutex alive_server_mutex;
+        mutable std::mutex alive_server_mutex;
     };
 
     AliveServers alive_servers;
