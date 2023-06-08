@@ -21,6 +21,7 @@
 namespace DB::DaemonManager
 {
 
+class QueryCacheManager;
 class DaemonManagerServiceImpl : public DB::Protos::DaemonManagerService
 {
 public:
@@ -57,6 +58,12 @@ public:
         ::google::protobuf::RpcController * controller,
         const ::DB::Protos::GetOrInsertCacheInfoReq * request,
         ::DB::Protos::GetOrInsertCacheInfoResp * response,
+        ::google::protobuf::Closure * done) override;
+
+    void SetLastUpdateTimestamp(
+        ::google::protobuf::RpcController * controller,
+        const ::DB::Protos::SetLastUpdateTimestampReq * request,
+        ::DB::Protos::SetLastUpdateTimestampResp * response,
         ::google::protobuf::Closure * done) override;
 #endif
 private:

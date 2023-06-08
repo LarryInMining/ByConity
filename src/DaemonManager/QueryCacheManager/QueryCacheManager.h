@@ -54,12 +54,20 @@ public:
     CacheInfo getOrInsertCacheInfo(const ServerAddress & origin_server, const UUID, const TxnTimestamp query_txn_ts);
     void setLastUpdateTs(const UUID, const TxnTimestamp update_ts);
     void setAliveServers(std::vector<ServerAddress> alive_server);
-    std::vector<ServerAddress> getAliveServers() const;
+
+    struct AllInfo
+    {
+        std::vector<ServerAddress> alive_servers;
+        std::array<std::unordered_map<UUID, CacheInfo>, 1ull << bits_for_first_level> cache_info;
+    };
+
+    AllInfo getAllInfo() const;
+
 private:
     struct UUIDToCacheInfoMapPart
     {
         std::unordered_map<UUID, CacheInfo> map;
-        std::mutex mutex;
+        mutable std::mutex mutex;
     };
 
     static constexpr UInt64 bits_for_first_level = 4;

@@ -71,9 +71,21 @@ void QueryCacheManager::setAliveServers(std::vector<ServerAddress> servers)
     alive_servers.set(std::move(servers));
 }
 
-std::vector<ServerAddress> QueryCacheManager::getAliveServers() const
+AllInfo QueryCacheManager::getAllInfo() const
 {
-    return alive_servers.clone();
+    AllInfo res;
+    res.alive_servers = alive_servers.clone();
+
+    std::array<std::unordered_map<UUID, CacheInfo>, 1ull << bits_for_first_level> cache_info;
+
+    std::transform(uuid_map.begin(), uuid_map.end(), res.cache_info.begin(),
+        [] (const UUIDToCacheInfoMapPart & map_part)
+        {
+            std::lock_guard lock{map_part.mutext};
+            return map_part.map;
+        });
+
+    return res;
 }
 
 }
