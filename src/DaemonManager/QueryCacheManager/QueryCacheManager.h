@@ -30,6 +30,11 @@ struct CacheInfo
     TxnTimestamp last_update_ts;
 };
 
+bool operator ==(const CacheInfo & lhs, const CacheInfo & rhs)
+{
+    return (lhs.server_address == rhs.server_address) && (lhs.last_update_ts == rhs.last_update_ts);
+}
+
 /*when the query using query cache, firstly the server that process query reach DM, DM find the machine that store that cache, if there is no machine to store cache for the table yet, create one and return the CacheInfo with the last_update_ts is the timestamp of select query. Then the server forward the query to that server. It is better to also forward the info of last_update_ts, in the new server it process the query, depend on if the last_update_ts is forward along, it may need to send request to DM one more time*/
 
 class QueryCacheManager
@@ -37,7 +42,7 @@ class QueryCacheManager
 public:
     CacheInfo getOrInsertCacheInfo(const String & origin_server, const UUID, const TxnTimestamp query_txn_ts);
     void setLastUpdateTs(const UUID, const TxnTimestamp update_ts);
-    void updateAliveServers(std::vector<String> alive_server);
+    void setAliveServers(std::vector<String> alive_server);
 private:
     struct UUIDToCacheInfoMapPart
     {
