@@ -89,6 +89,7 @@ bool DaemonJobQueryCacheManager::executeImpl()
     HostWithPortsVec host_ports = server_topologies.back().getServerList();
     std::vector<ServerAddress> server_addresses = getServerAddressesFromHostPortVec(host_ports);
     cache_manager.setAliveServers(server_addresses);
+    return true;
 }
 
 QueryCacheManager * lookForQueryCacheManager(std::vector<DaemonJobPtr> & local_daemon_jobs)
