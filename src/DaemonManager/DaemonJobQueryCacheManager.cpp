@@ -51,7 +51,7 @@ DaemonJobQueryCacheManager::DaemonJobQueryCacheManager(ContextMutablePtr global_
     HostWithPortsVec host_ports = server_topologies.back().getServerList();
 
     std::vector<ServerAddress> server_addresses;
-    std::transform(host_ports.begin(), host_ports.end(), std::back_inserter(ret),
+    std::transform(host_ports.begin(), host_ports.end(), std::back_inserter(server_addresses),
         [] (const HostWithPorts & host_port)
         {
             return ServerAddress{host_port.getHost(), host_port.getTCPPort()};
