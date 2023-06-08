@@ -16,6 +16,8 @@
 #pragma once
 
 #include <DaemonManager/DaemonJob.h>
+#include <DaemonManager/QueryCacheManager/QueryCacheManager.h>
+#include <Interpreters/Context_fwd.h>
 
 namespace DB::DaemonManager
 {
@@ -35,6 +37,7 @@ private:
     std::shared_ptr<CnchTopologyMaster> topology_master;
 };
 
-QueryCacheManager * lookforQueryCacheManager(std::vector<DaemonJobPtr> & local_daemon_jobs);
+QueryCacheManager * lookForQueryCacheManager(std::vector<DaemonJobPtr> & local_daemon_jobs);
 
 }
+
