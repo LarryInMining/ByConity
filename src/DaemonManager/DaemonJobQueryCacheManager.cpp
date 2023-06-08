@@ -14,14 +14,12 @@
  */
 
 #include <netdb.h>
-#include <DaemonManager/DaemonJobGlobalGC.h>
+#include <MergeTreeCommon/CnchTopologyMaster.h>
 #include <DaemonManager/DaemonHelper.h>
 #include <DaemonManager/DaemonFactory.h>
 #include <DaemonManager/DMDefines.h>
+#include <DaemonManager/DaemonJobQueryCacheManager.h>
 #include <Core/UUID.h>
-#include <MergeTreeCommon/CnchTopologyMaster.h>
-#include <CloudServices/CnchServerClientPool.h>
-#include <CloudServices/CnchServerClient.h>
 #include <iterator>
 
 namespace DB::DaemonManager

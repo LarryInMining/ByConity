@@ -16,7 +16,6 @@
 #pragma once
 
 #include <DaemonManager/DaemonJob.h>
-#include <Catalog/Catalog.h>
 
 namespace DB::DaemonManager
 {
