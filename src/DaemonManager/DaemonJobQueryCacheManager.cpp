@@ -26,7 +26,7 @@ namespace DB::DaemonManager
 {
 
 
-DaemonJobQueryCacheManager(ContextMutablePtr global_context_);
+DaemonJobQueryCacheManager(ContextMutablePtr global_context_)
     : DaemonJobQueryCacheManager{std::move(global_context_), CnchBGThreadType::QueryCacheManager}
 {
     topology_master = global_context->getCnchTopologyMaster();
