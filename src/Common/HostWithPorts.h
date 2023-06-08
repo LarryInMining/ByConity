@@ -170,7 +170,7 @@ public:
     std::string getExchangeAddress() const { return fmt::format("{}:{}", addBracketsIfIpv6(host), std::to_string(exchange_port)); }
     std::string getExchangeStatusAddress() const { return fmt::format("{}:{}", addBracketsIfIpv6(host), std::to_string(exchange_status_port)); }
 
-    const std::string & getHost() const { return removeBracketsIfIpv6(host); }
+    const std::string & getHost() const { return String{removeBracketsIfIpv6(host)}; }
     uint16_t getTCPPort() const { return tcp_port; }
     uint16_t getHTTPPort() const { return http_port; }
     uint16_t getRPCPort() const { return rpc_port; }
