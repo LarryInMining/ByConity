@@ -30,7 +30,7 @@ struct CacheInfo
     TxnTimestamp last_update_ts;
 };
 
-bool operator ==(const CacheInfo & lhs, const CacheInfo & rhs)
+inline bool operator ==(const CacheInfo & lhs, const CacheInfo & rhs)
 {
     return (lhs.server_address == rhs.server_address) && (lhs.last_update_ts == rhs.last_update_ts);
 }
