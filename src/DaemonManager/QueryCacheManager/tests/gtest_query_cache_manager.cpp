@@ -24,9 +24,9 @@ using namespace DB;
 namespace GtestQueryCacheManager
 {
 
-constexpr ServerAddress SERVER1{"169.128.0.1", 1223};
-constexpr ServerAddress SERVER2{"169.128.0.2", 1223};
-constexpr ServerAddress SERVER3{"169.128.0.3", 1223};
+const ServerAddress SERVER1{"169.128.0.1", 1223};
+const ServerAddress SERVER2{"169.128.0.2", 1223};
+const ServerAddress SERVER3{"169.128.0.3", 1223};
 UUID uuid1 = UUID{UInt128{0, 1}};
 UUID uuid2 = UUID{UInt128{0, 2}};
 UUID uuid3 = UUID{UInt128{0, 3}};
