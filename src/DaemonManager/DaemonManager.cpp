@@ -24,6 +24,7 @@
 #include <DaemonManager/DaemonManager.h>
 #include <DaemonManager/registerDaemons.h>
 #include <DaemonManager/DaemonJobGlobalGC.h>
+#include <DaemonManager/DaemonJobQueryCacheManager.h>
 #include <Dictionaries/registerDictionaries.h>
 #include <Disks/registerDisks.h>
 #include <Functions/registerFunctions.h>
