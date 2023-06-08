@@ -38,6 +38,7 @@ TEST(QueryCacheManager, normal_test)
 {
     QueryCacheManager cache_manager;
     cache_manager.setAliveServers({SERVER1, SERVER2});
+
     {
         CacheInfo cache_info = cache_manager.getOrInsertCacheInfo(SERVER1, uuid1, 1);
         CacheInfo expected {SERVER1, 1};
@@ -50,7 +51,19 @@ TEST(QueryCacheManager, normal_test)
         EXPECT_EQ(cache_info, expected);
     }
 
+    {
+        const vector<ServerAddress> alive_servers = cache_manager.getAliveServers();
+        const vector<ServerAddress> expected{SERVER1, SERVER2};
+        EXPECT_EQ(alive_servers, expected);
+    }
+
     cache_manager.setAliveServers({SERVER2, SERVER3});
+
+    {
+        const vector<ServerAddress> alive_servers = cache_manager.getAliveServers();
+        const vector<ServerAddress> expected{SERVER2, SERVER3};
+        EXPECT_EQ(alive_servers, expected);
+    }
 
     {
         CacheInfo cache_info = cache_manager.getOrInsertCacheInfo(SERVER2, uuid1, 3);
