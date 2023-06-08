@@ -54,7 +54,7 @@ public:
     CacheInfo getOrInsertCacheInfo(const ServerAddress & origin_server, const UUID, const TxnTimestamp query_txn_ts);
     void setLastUpdateTs(const UUID, const TxnTimestamp update_ts);
     void setAliveServers(std::vector<ServerAddress> alive_server);
-    std::vector<ServerAddress> getAliveServer() const;
+    std::vector<ServerAddress> getAliveServers() const;
 private:
     struct UUIDToCacheInfoMapPart
     {

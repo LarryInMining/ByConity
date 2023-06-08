@@ -71,7 +71,7 @@ void QueryCacheManager::setAliveServers(std::vector<ServerAddress> servers)
     alive_servers.set(std::move(servers));
 }
 
-std::vector<ServerAddress> QueryCacheManager::getAliveServer() const
+std::vector<ServerAddress> QueryCacheManager::getAliveServers() const
 {
     return alive_servers.clone();
 }
