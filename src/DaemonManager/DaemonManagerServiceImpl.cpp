@@ -203,7 +203,7 @@ void DaemonManagerServiceImpl::GetCacheInfos(
         if (!query_cache_manager)
             return;
 
-        AllInfo all_info = query_cache_manager->getAllInfo();
+        QueryCacheManager::AllInfo all_info = query_cache_manager->getAllInfo();
         std::for_each(all_info.alive_servers.begin(), all_info.alive_servers.end(),
             [&response] (const ServerAddress & address)
             {
@@ -211,7 +211,7 @@ void DaemonManagerServiceImpl::GetCacheInfos(
             }
         );
 
-        std::for_each(all_info.cache_info.begin(), all_info.cache_info.end()
+        std::for_each(all_info.cache_info.begin(), all_info.cache_info.end(),
             [&response] (const std::unordered_map<UUID, CacheInfo> & map_part)
             {
                 std::for_each(map_part.begin(), map_part.end(),
