@@ -191,8 +191,8 @@ void DaemonManagerServiceImpl::ForwardOptimizeQuery(
 }
 
 void DaemonManagerServiceImpl::GetCacheInfos(
-    ::google::protobuf::RpcController * controller,
-    const ::DB::Protos::GetCacheInfosReq * request,
+    ::google::protobuf::RpcController *,
+    const ::DB::Protos::GetCacheInfosReq *,
     ::DB::Protos::GetCacheInfosResp * response,
     ::google::protobuf::Closure * done)
 {
