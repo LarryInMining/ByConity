@@ -190,6 +190,54 @@ void DaemonManagerServiceImpl::ForwardOptimizeQuery(
     }
 }
 
+void DaemonManagerServiceImpl::GetOrInsertCacheInfo(
+    ::google::protobuf::RpcController *,
+    const ::DB::Protos::GetOrInsertCacheInfoReq * request,
+    ::DB::Protos::GetOrInsertCacheInfoResp * response,
+    ::google::protobuf::Closure * done)
+{
+    brpc::ClosureGuard done_guard(done);
+    try
+    {
+        LOG_INFO( log, "Receive GetOrInsertCacheInfo RPC request");
+        if (!query_cache_manager)
+            return;
+        UUID uuid = RPCHelpers::createUUID(request->uuid());
+        ServerAddress send_server_address{request->send_server_address().host(), request->send_server_address().tcp_port()}
+        TxnTimestamp query_txn_ts{request->query_txn_ts()};
+        CacheInfo cache_info = query_cache_manager->getOrInsertCacheInfo(send_server_address, uuid, query_txn_ts);
+        fillCacheInfoEntry(uuid, cache_info, response->mutable_cache_info_entry());
+    }
+    catch (...)
+    {
+        tryLogCurrentException(log, __PRETTY_FUNCTION__);
+        RPCHelpers::handleException(response->mutable_exception());
+    }
+}
+
+void DaemonManagerServiceImpl::SetLastUpdateTimestamp(
+    ::google::protobuf::RpcController * controller,
+    const ::DB::Protos::SetLastUpdateTimestampReq * request,
+    ::DB::Protos::SetLastUpdateTimestampResp * response,
+    ::google::protobuf::Closure * done)
+{
+    brpc::ClosureGuard done_guard(done);
+    try
+    {
+        LOG_INFO( log, "Receive SetLastUpdateTimestamp RPC request");
+        if (!query_cache_manager)
+            return;
+        UUID uuid = RPCHelpers::createUUID(request->uuid());
+        TxnTimestamp update_ts{request->update_ts()};
+        CacheInfo cache_info = query_cache_manager->setLastUpdateTs(uuid, update_ts);
+    }
+    catch (...)
+    {
+        tryLogCurrentException(log, __PRETTY_FUNCTION__);
+        RPCHelpers::handleException(response->mutable_exception());
+    }
+}
+
 void DaemonManagerServiceImpl::GetCacheInfos(
     ::google::protobuf::RpcController *,
     const ::DB::Protos::GetCacheInfosReq *,

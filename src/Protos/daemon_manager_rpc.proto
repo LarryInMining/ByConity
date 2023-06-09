@@ -87,6 +87,30 @@ message GetCacheInfosResp
     optional string exception = 3;
 }
 
+message GetOrInsertCacheInfoReq
+{
+    optional UUID uuid = 1
+    optional QueryCacheServerAddress send_server_address = 2;
+    optional uint64 query_txn_ts = 3
+}
+
+message GetOrInsertCacheInfoResp
+{
+    optional CacheInfoEntry cache_info_entry = 1;
+    optional string exception = 2;
+}
+
+message SetLastUpdateTsReq
+{
+    optional UUID uuid = 1;
+    optional uint64 update_ts = 2;
+}
+
+message SetLastUpdateTsResp
+{
+    optional string exception = 1;
+}
+
 service DaemonManagerService
 {
     rpc GetAllBGThreadServers(GetAllBGThreadServersReq) returns (GetAllBGThreadServersResp);
@@ -94,4 +118,6 @@ service DaemonManagerService
     rpc ControlDaemonJob(ControlDaemonJobReq) returns (ControlDaemonJobResp);
     rpc ForwardOptimizeQuery(ForwardOptimizeQueryReq) returns (ForwardOptimizeQueryResp);
     rpc GetCacheInfos(GetCacheInfosReq) returns (GetCacheInfosResp);
+    rpc GetOrInsertCacheInfo(GetOrInsertCacheInfoReq) returns (GetOrInsertCacheInfoResp);
+    rpc SetLastUpdateTs(SetLastUpdateTsReq) returns (SetLastUpdateTsResp);
 };
