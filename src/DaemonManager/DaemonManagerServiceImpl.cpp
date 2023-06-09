@@ -203,10 +203,10 @@ void DaemonManagerServiceImpl::GetOrInsertCacheInfo(
         if (!query_cache_manager)
             return;
         UUID uuid = RPCHelpers::createUUID(request->uuid());
-        ServerAddress send_server_address{request->send_server_address().host(), request->send_server_address().tcp_port()}
+        ServerAddress send_server_address{request->send_server_address().host(), static_cast<UInt16>(request->send_server_address().tcp_port())}
         TxnTimestamp query_txn_ts{request->query_txn_ts()};
         CacheInfo cache_info = query_cache_manager->getOrInsertCacheInfo(send_server_address, uuid, query_txn_ts);
-        fillCacheInfoEntry(uuid, cache_info, response->mutable_cache_info_entry());
+        fillCacheInfoEntry(uuid, cache_info, *response->mutable_cache_info_entry());
     }
     catch (...)
     {
@@ -216,7 +216,7 @@ void DaemonManagerServiceImpl::GetOrInsertCacheInfo(
 }
 
 void DaemonManagerServiceImpl::SetLastUpdateTimestamp(
-    ::google::protobuf::RpcController * controller,
+    ::google::protobuf::RpcController *,
     const ::DB::Protos::SetLastUpdateTimestampReq * request,
     ::DB::Protos::SetLastUpdateTimestampResp * response,
     ::google::protobuf::Closure * done)
