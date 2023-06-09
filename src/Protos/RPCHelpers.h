@@ -22,11 +22,10 @@
 #include <Core/UUID.h>
 #include <Common/ThreadPool.h>
 #include <Common/HostWithPorts.h>
-// #include <Bytepond/core/mapping/BpQueryKey.h>
-// #include <Bytepond/core/storage/BlockHdfsStorageManager.h>
 #include <Interpreters/StorageID.h>
 #include <Interpreters/Context_fwd.h>
 #include <Protos/cnch_common.pb.h>
+#include <Protos/daemon_manager_rpc.pb.h>
 #include <DaemonManager/QueryCacheManager/QueryCacheManager.h>
 
 #include <brpc/closure_guard.h>
