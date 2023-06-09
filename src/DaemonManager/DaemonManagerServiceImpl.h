@@ -53,22 +53,22 @@ public:
         ::DB::Protos::ForwardOptimizeQueryResp * response,
         ::google::protobuf::Closure * done) override;
 
-    void GetOrInsertCacheInfo(
+    void GetOrInsertQueryCacheInfo(
         ::google::protobuf::RpcController * controller,
-        const ::DB::Protos::GetOrInsertCacheInfoReq * request,
-        ::DB::Protos::GetOrInsertCacheInfoResp * response,
+        const ::DB::Protos::GetOrInsertQueryCacheInfoReq * request,
+        ::DB::Protos::GetOrInsertQueryCacheInfoResp * response,
         ::google::protobuf::Closure * done) override;
 
-    void SetLastUpdateTimestamp(
+    void SetQueryCacheLastUpdateTimestamp(
         ::google::protobuf::RpcController * controller,
-        const ::DB::Protos::SetLastUpdateTimestampReq * request,
-        ::DB::Protos::SetLastUpdateTimestampResp * response,
+        const ::DB::Protos::SetQueryCacheLastUpdateTimestampReq * request,
+        ::DB::Protos::SetQueryCacheLastUpdateTimestampResp * response,
         ::google::protobuf::Closure * done) override;
 
-    void GetCacheInfos(
+    void GetQueryCacheInfos(
         ::google::protobuf::RpcController * controller,
-        const ::DB::Protos::GetCacheInfosReq * request,
-        ::DB::Protos::GetCacheInfosResp * response,
+        const ::DB::Protos::GetQueryCacheInfosReq * request,
+        ::DB::Protos::GetQueryCacheInfosResp * response,
         ::google::protobuf::Closure * done) override;
 
 private:
