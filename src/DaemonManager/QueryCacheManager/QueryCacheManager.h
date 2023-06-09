@@ -93,4 +93,10 @@ private:
     AliveServers alive_servers;
 };
 
+struct QueryCacheManagerInfos
+{
+    std::vector<ServerAddress> alive_servers;
+    std::vector<std::pair<UUID, CacheInfo>> cache_info;
+}
+
 } /// end namespace

@@ -124,4 +124,71 @@ void DaemonManagerClient::forwardOptimizeQuery(const StorageID & storage_id, con
     RPCHelpers::checkResponse(resp);
 }
 
+CacheInfo DaemonManagerClient::getOrInsertQueryCacheInfo(const ServerAddress & origin_server, const UUID uuid, const TxnTimestamp query_txn_ts)
+{
+    brpc::Controller cntl;
+    Protos::GetOrInsertQueryCacheInfoReq req;
+    Protos::GetOrInsertQueryCacheInfoResp resp;
+
+    RPCHelpers::fillUUID(uuid, *req.mutable_uuid());
+    RPCHelpers::fillCacheServerAddress(origin_server, *req.mutable_send_server_address());
+    req.set_query_txn_ts(query_txn_ts);
+    stub_ptr->GetOrInsertQueryCacheInfo(&cntl, &req, &resp, nullptr);
+
+    assertController(cntl);
+    RPCHelpers::checkResponse(resp);
+    CacheInfo res{RPCHelpers::createCacheServerAddress(resp.cache_info_entry.server_address), resp.cache_info_entry.last_update_ts};
+    return res;
+}
+
+void DaemonManagerClient::setQueryCacheLastUpdateTimestamp(const UUID, const TxnTimestamp update_ts)
+{
+    brpc::Controller cntl;
+    Protos::SetQueryCacheLastUpdateTimestampReq req;
+    Protos::SetQueryCacheLastUpdateTimestampResp resp;
+
+    RPCHelpers::fillUUID(uuid, *req.mutable_uuid());
+    req.set_update_ts(update_ts);
+    stub_ptr->SetQueryCacheLastUpdateTimestamp(&cntl, &req, &resp, nullptr);
+
+    assertController(cntl);
+    RPCHelpers::checkResponse(resp);
+}
+
+QueryCacheManagerInfos DaemonManagerClient::getQueryCacheInfos()
+{
+    brpc::Controller cntl;
+    Protos::GetQueryCacheInfosReq req;
+    Protos::GetQueryCacheInfosResp resp;
+
+    stub_ptr->GetQueryCacheInfos(&cntl, &req, &resp, nullptr);
+    assertController(cntl);
+    RPCHelpers::checkResponse(resp);
+
+    QueryCacheManagerInfos res;
+    std::transform(resp.server_addresses().begin(), resp.server_addresses().end(),
+        std::back_inserter(res.alive_servers),
+        [&res] (auto & server_address)
+        {
+            return RPCHelpers::createCacheServerAddress(server_address);
+        }
+    );
+    std::transform(resp.cache_info_entries.begin(), resp.cache_info_entries.end(),
+        std::back_inserter(res.cache_infos),
+        [&res] (auto & cache_info_entry)
+        {
+            ServerAddress add{cache_info_entry.server_address.host(), };
+            return std::make_pair(
+                    RPCHelpers::createUUID(cache_info_entry.uuid()),
+                    CacheInfo{
+                        RPCHelpers::createCacheServerAddress(cache_info_entry.server_address()),
+                        cache_info_entry.last_update_ts()
+                             }
+                   );
+        }
+    );
+
+    return res;
+}
+
 }

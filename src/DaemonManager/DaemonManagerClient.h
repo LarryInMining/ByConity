@@ -22,6 +22,7 @@
 #include <Core/Types.h>
 #include <Core/UUID.h>
 #include <DaemonManager/DaemonManagerClient_fwd.h>
+#include <DaemonManager/QueryCacheManager/QueryCacheManager.h>
 
 namespace DB
 {
@@ -46,6 +47,11 @@ public:
     std::optional<BGJobInfo> getDMBGJobInfo(const UUID & storage_uuid, CnchBGThreadType type);
     void controlDaemonJob(const StorageID & storage_id, CnchBGThreadType job_type, CnchBGThreadAction action);
     void forwardOptimizeQuery(const StorageID & storage_id, const String & partition_id, bool enable_try, bool mutations_sync, UInt64 timeout_ms);
+    CacheInfo getOrInsertQueryCacheInfo(const ServerAddress & origin_server, const UUID, const TxnTimestamp query_txn_ts);
+
+    void setQueryCacheLastUpdateTimestamp(const UUID, const TxnTimestamp update_ts);
+
+    QueryCacheManager::AllInfo getQueryCacheInfos();
 
 private:
     std::unique_ptr<Protos::DaemonManagerService_Stub> stub_ptr;

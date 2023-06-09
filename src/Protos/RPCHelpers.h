@@ -165,4 +165,7 @@ namespace DB::RPCHelpers
             RPCHelpers::handleException(resp->mutable_exception());
         }
     }
+
+    void fillCacheServerAddress(const ServerAddress & address, Protos::QueryCacheServerAddress & pb);
+    ServerAddress createCacheServerAddress(const Protos::QueryCacheServerAddress & pb);
 }

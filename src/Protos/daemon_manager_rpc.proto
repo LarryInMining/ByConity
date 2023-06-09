@@ -63,7 +63,7 @@ message ForwardOptimizeQueryResp
     optional string exception = 1;
 }
 
-message GetCacheInfosReq
+message GetQueryCacheInfosReq
 {
 }
 
@@ -80,33 +80,33 @@ message CacheInfoEntry
     optional uint64 last_update_ts = 3;   
 }
 
-message GetCacheInfosResp
+message GetQueryCacheInfosResp
 {
     repeated QueryCacheServerAddress server_addresses = 1;  
     repeated CacheInfoEntry cache_info_entries = 2;
     optional string exception = 3;
 }
 
-message GetOrInsertCacheInfoReq
+message GetOrInsertQueryCacheInfoReq
 {
     optional UUID uuid = 1;
     optional QueryCacheServerAddress send_server_address = 2;
     optional uint64 query_txn_ts = 3;
 }
 
-message GetOrInsertCacheInfoResp
+message GetOrInsertQueryCacheInfoResp
 {
     optional CacheInfoEntry cache_info_entry = 1;
     optional string exception = 2;
 }
 
-message SetLastUpdateTimestampReq
+message SetQueryCacheLastUpdateTimestampReq
 {
     optional UUID uuid = 1;
     optional uint64 update_ts = 2;
 }
 
-message SetLastUpdateTimestampResp
+message SetQueryCacheLastUpdateTimestampResp
 {
     optional string exception = 1;
 }
@@ -117,7 +117,7 @@ service DaemonManagerService
     rpc GetDMBGJobInfo(GetDMBGJobInfoReq) returns (GetDMBGJobInfoResp);
     rpc ControlDaemonJob(ControlDaemonJobReq) returns (ControlDaemonJobResp);
     rpc ForwardOptimizeQuery(ForwardOptimizeQueryReq) returns (ForwardOptimizeQueryResp);
-    rpc GetCacheInfos(GetCacheInfosReq) returns (GetCacheInfosResp);
-    rpc GetOrInsertCacheInfo(GetOrInsertCacheInfoReq) returns (GetOrInsertCacheInfoResp);
-    rpc SetLastUpdateTimestamp(SetLastUpdateTimestampReq) returns (SetLastUpdateTimestampResp);
+    rpc GetQueryCacheInfos(GetQueryCacheInfosReq) returns (GetQueryCacheInfosResp);
+    rpc GetOrInsertQueryCacheInfo(GetOrInsertQueryCacheInfoReq) returns (GetOrInsertQueryCacheInfoResp);
+    rpc SetQueryCacheLastUpdateTimestamp(SetQueryCacheLastUpdateTimestampReq) returns (SetQueryCacheLastUpdateTimestampResp);
 };

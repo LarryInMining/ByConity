@@ -97,6 +97,17 @@ namespace RPCHelpers
         else /// Should we throw exception here to cover all other errors?
             throw Exception(std::to_string(err) + ":" + cntl.ErrorText(), ErrorCodes::BRPC_EXCEPTION);
     }
+
+    void fillCacheServerAddress(const ServerAddress & address, Protos::QueryCacheServerAddress & pb)
+    {
+        pb.set_host(address.host);
+        pb.set_tcp_port(address.tcp_port);
+    }
+
+    ServerAddress createCacheServerAddress(const Protos::QueryCacheServerAddress & pb)
+    {
+        return {pb.host(), pb.tcp_port()};
+    }
 }
 
 }

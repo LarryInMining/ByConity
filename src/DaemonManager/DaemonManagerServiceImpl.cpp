@@ -42,12 +42,6 @@ void fillDMBGJobInfo(const BGJobInfo & bg_job_data, Protos::DMBGJobInfo & pb)
     pb.set_last_start_time(bg_job_data.last_start_time);
 }
 
-void fillCacheServerAddress(const ServerAddress & address, Protos::QueryCacheServerAddress & pb)
-{
-    pb.set_host(address.host);
-    pb.set_tcp_port(address.tcp_port);
-}
-
 void fillCacheInfoEntry(const UUID & uuid, const CacheInfo & cache_info, Protos::CacheInfoEntry & pb)
 {
     RPCHelpers::fillUUID(uuid, *pb.mutable_uuid());
@@ -190,16 +184,16 @@ void DaemonManagerServiceImpl::ForwardOptimizeQuery(
     }
 }
 
-void DaemonManagerServiceImpl::GetOrInsertCacheInfo(
+void DaemonManagerServiceImpl::GetOrInsertQueryCacheInfo(
     ::google::protobuf::RpcController *,
-    const ::DB::Protos::GetOrInsertCacheInfoReq * request,
-    ::DB::Protos::GetOrInsertCacheInfoResp * response,
+    const ::DB::Protos::GetOrInsertQueryCacheInfoReq * request,
+    ::DB::Protos::GetOrInsertQueryCacheInfoResp * response,
     ::google::protobuf::Closure * done)
 {
     brpc::ClosureGuard done_guard(done);
     try
     {
-        LOG_INFO( log, "Receive GetOrInsertCacheInfo RPC request");
+        LOG_INFO( log, "Receive GetOrInsertQueryCacheInfo RPC request");
         if (!query_cache_manager)
             return;
         UUID uuid = RPCHelpers::createUUID(request->uuid());
@@ -215,16 +209,16 @@ void DaemonManagerServiceImpl::GetOrInsertCacheInfo(
     }
 }
 
-void DaemonManagerServiceImpl::SetLastUpdateTimestamp(
+void DaemonManagerServiceImpl::SetQueryCacheLastUpdateTimestamp(
     ::google::protobuf::RpcController *,
-    const ::DB::Protos::SetLastUpdateTimestampReq * request,
-    ::DB::Protos::SetLastUpdateTimestampResp * response,
+    const ::DB::Protos::SetQueryCacheLastUpdateTimestampReq * request,
+    ::DB::Protos::SetQueryCacheLastUpdateTimestampResp * response,
     ::google::protobuf::Closure * done)
 {
     brpc::ClosureGuard done_guard(done);
     try
     {
-        LOG_INFO( log, "Receive SetLastUpdateTimestamp RPC request");
+        LOG_INFO( log, "Receive SetQueryCacheLastUpdateTimestamp RPC request");
         if (!query_cache_manager)
             return;
         UUID uuid = RPCHelpers::createUUID(request->uuid());
@@ -238,16 +232,16 @@ void DaemonManagerServiceImpl::SetLastUpdateTimestamp(
     }
 }
 
-void DaemonManagerServiceImpl::GetCacheInfos(
+void DaemonManagerServiceImpl::GetQueryCacheInfos(
     ::google::protobuf::RpcController *,
-    const ::DB::Protos::GetCacheInfosReq *,
-    ::DB::Protos::GetCacheInfosResp * response,
+    const ::DB::Protos::GetQueryCacheInfosReq *,
+    ::DB::Protos::GetQueryCacheInfosResp * response,
     ::google::protobuf::Closure * done)
 {
     brpc::ClosureGuard done_guard(done);
     try
     {
-        LOG_INFO( log, "Receive GetCacheInfos RPC request");
+        LOG_INFO( log, "Receive GetQueryCacheInfos RPC request");
         if (!query_cache_manager)
             return;
 
