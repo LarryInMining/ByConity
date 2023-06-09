@@ -97,6 +97,6 @@ struct QueryCacheManagerInfos
 {
     std::vector<ServerAddress> alive_servers;
     std::vector<std::pair<UUID, CacheInfo>> cache_infos;
-}
+};
 
 } /// end namespace

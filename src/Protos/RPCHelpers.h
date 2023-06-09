@@ -167,6 +167,6 @@ namespace DB::RPCHelpers
         }
     }
 
-    void fillCacheServerAddress(const ServerAddress & address, Protos::QueryCacheServerAddress & pb);
-    ServerAddress createCacheServerAddress(const Protos::QueryCacheServerAddress & pb);
+    void fillCacheServerAddress(const DaemonManager::ServerAddress & address, Protos::QueryCacheServerAddress & pb);
+    DaemonManager::ServerAddress createCacheServerAddress(const Protos::QueryCacheServerAddress & pb);
 }
