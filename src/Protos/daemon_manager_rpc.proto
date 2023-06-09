@@ -100,13 +100,13 @@ message GetOrInsertCacheInfoResp
     optional string exception = 2;
 }
 
-message SetLastUpdateTsReq
+message SetLastUpdateTimestampReq
 {
     optional UUID uuid = 1;
     optional uint64 update_ts = 2;
 }
 
-message SetLastUpdateTsResp
+message SetLastUpdateTimestampResp
 {
     optional string exception = 1;
 }
@@ -119,5 +119,5 @@ service DaemonManagerService
     rpc ForwardOptimizeQuery(ForwardOptimizeQueryReq) returns (ForwardOptimizeQueryResp);
     rpc GetCacheInfos(GetCacheInfosReq) returns (GetCacheInfosResp);
     rpc GetOrInsertCacheInfo(GetOrInsertCacheInfoReq) returns (GetOrInsertCacheInfoResp);
-    rpc SetLastUpdateTs(SetLastUpdateTsReq) returns (SetLastUpdateTsResp);
+    rpc SetLastUpdateTimestamp(SetLastUpdateTimestampReq) returns (SetLastUpdateTimestampResp);
 };
