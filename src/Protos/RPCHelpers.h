@@ -27,6 +27,7 @@
 #include <Interpreters/StorageID.h>
 #include <Interpreters/Context_fwd.h>
 #include <Protos/cnch_common.pb.h>
+#include <DaemonManager/QueryCacheManager/QueryCacheManager.h>
 
 #include <brpc/closure_guard.h>
 #include <brpc/controller.h>
