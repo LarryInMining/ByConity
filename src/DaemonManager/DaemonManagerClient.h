@@ -51,7 +51,7 @@ public:
 
     void setQueryCacheLastUpdateTimestamp(const UUID, const TxnTimestamp update_ts);
 
-    QueryCacheManager::AllInfo getQueryCacheInfos();
+    QueryCacheManagerInfos getQueryCacheInfos();
 
 private:
     std::unique_ptr<Protos::DaemonManagerService_Stub> stub_ptr;

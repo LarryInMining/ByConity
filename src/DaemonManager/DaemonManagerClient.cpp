@@ -137,11 +137,11 @@ CacheInfo DaemonManagerClient::getOrInsertQueryCacheInfo(const ServerAddress & o
 
     assertController(cntl);
     RPCHelpers::checkResponse(resp);
-    CacheInfo res{RPCHelpers::createCacheServerAddress(resp.cache_info_entry.server_address), resp.cache_info_entry.last_update_ts};
+    CacheInfo res{RPCHelpers::createCacheServerAddress(resp.cache_info_entry().server_address()), resp.cache_info_entry().last_update_ts()};
     return res;
 }
 
-void DaemonManagerClient::setQueryCacheLastUpdateTimestamp(const UUID, const TxnTimestamp update_ts)
+void DaemonManagerClient::setQueryCacheLastUpdateTimestamp(const UUID uuid, const TxnTimestamp update_ts)
 {
     brpc::Controller cntl;
     Protos::SetQueryCacheLastUpdateTimestampReq req;
@@ -168,16 +168,15 @@ QueryCacheManagerInfos DaemonManagerClient::getQueryCacheInfos()
     QueryCacheManagerInfos res;
     std::transform(resp.server_addresses().begin(), resp.server_addresses().end(),
         std::back_inserter(res.alive_servers),
-        [&res] (auto & server_address)
+        [] (auto & server_address)
         {
             return RPCHelpers::createCacheServerAddress(server_address);
         }
     );
-    std::transform(resp.cache_info_entries.begin(), resp.cache_info_entries.end(),
+    std::transform(resp.cache_info_entries().begin(), resp.cache_info_entries().end(),
         std::back_inserter(res.cache_infos),
-        [&res] (auto & cache_info_entry)
+        [] (auto & cache_info_entry)
         {
-            ServerAddress add{cache_info_entry.server_address.host(), };
             return std::make_pair(
                     RPCHelpers::createUUID(cache_info_entry.uuid()),
                     CacheInfo{
