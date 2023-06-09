@@ -50,7 +50,7 @@ void fillCacheServerAddress(const ServerAddress & address, Protos::QueryCacheSer
 
 void fillCacheInfoEntry(const UUID & uuid, const ServerAddress & address, const uint64_t last_update_ts, Protos::CacheInfoEntry & pb)
 {
-    fillUUID(uuid, *pb.mutable_uuid());
+    RPCHelpers::fillUUID(uuid, *pb.mutable_uuid());
     fillCacheServerAddress(address, *pb.mutable_server_address());
     pb.set_last_update_ts(last_update_ts);
 }
@@ -194,7 +194,7 @@ void DaemonManagerServiceImpl::GetCacheInfos(
     ::google::protobuf::RpcController * controller,
     const ::DB::Protos::GetCacheInfosReq * request,
     ::DB::Protos::GetCacheInfosResp * response,
-    ::google::protobuf::Closure * done) override
+    ::google::protobuf::Closure * done)
 {
     brpc::ClosureGuard done_guard(done);
     try
