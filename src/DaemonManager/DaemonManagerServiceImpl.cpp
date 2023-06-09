@@ -203,7 +203,7 @@ void DaemonManagerServiceImpl::GetOrInsertCacheInfo(
         if (!query_cache_manager)
             return;
         UUID uuid = RPCHelpers::createUUID(request->uuid());
-        ServerAddress send_server_address{request->send_server_address().host(), static_cast<UInt16>(request->send_server_address().tcp_port())}
+        ServerAddress send_server_address{request->send_server_address().host(), static_cast<UInt16>(request->send_server_address().tcp_port())};
         TxnTimestamp query_txn_ts{request->query_txn_ts()};
         CacheInfo cache_info = query_cache_manager->getOrInsertCacheInfo(send_server_address, uuid, query_txn_ts);
         fillCacheInfoEntry(uuid, cache_info, *response->mutable_cache_info_entry());
@@ -229,7 +229,7 @@ void DaemonManagerServiceImpl::SetLastUpdateTimestamp(
             return;
         UUID uuid = RPCHelpers::createUUID(request->uuid());
         TxnTimestamp update_ts{request->update_ts()};
-        CacheInfo cache_info = query_cache_manager->setLastUpdateTs(uuid, update_ts);
+        query_cache_manager->setLastUpdateTs(uuid, update_ts);
     }
     catch (...)
     {
