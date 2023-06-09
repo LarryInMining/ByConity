@@ -89,9 +89,9 @@ message GetCacheInfosResp
 
 message GetOrInsertCacheInfoReq
 {
-    optional UUID uuid = 1
+    optional UUID uuid = 1;
     optional QueryCacheServerAddress send_server_address = 2;
-    optional uint64 query_txn_ts = 3
+    optional uint64 query_txn_ts = 3;
 }
 
 message GetOrInsertCacheInfoResp
