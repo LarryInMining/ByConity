@@ -45,7 +45,7 @@ void fillDMBGJobInfo(const BGJobInfo & bg_job_data, Protos::DMBGJobInfo & pb)
 void fillCacheInfoEntry(const UUID & uuid, const CacheInfo & cache_info, Protos::CacheInfoEntry & pb)
 {
     RPCHelpers::fillUUID(uuid, *pb.mutable_uuid());
-    fillCacheServerAddress(cache_info.server_address, *pb.mutable_server_address());
+    RPCHelpers::fillCacheServerAddress(cache_info.server_address, *pb.mutable_server_address());
     pb.set_last_update_ts(cache_info.last_update_ts);
 }
 
