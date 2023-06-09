@@ -249,7 +249,7 @@ void DaemonManagerServiceImpl::GetQueryCacheInfos(
         std::for_each(all_info.alive_servers.begin(), all_info.alive_servers.end(),
             [&response] (const ServerAddress & address)
             {
-                fillCacheServerAddress(address, *response->add_server_addresses());
+                RPCHelpers::fillCacheServerAddress(address, *response->add_server_addresses());
             }
         );
 
