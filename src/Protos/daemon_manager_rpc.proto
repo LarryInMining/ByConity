@@ -63,10 +63,35 @@ message ForwardOptimizeQueryResp
     optional string exception = 1;
 }
 
+message GetCacheInfosReq
+{
+}
+
+message QueryCacheServerAddress
+{
+    optional string host = 1;
+    optional uint16 tcp_port = 2;
+}
+
+message CacheInfoEntry
+{
+    optional UUID uuid = 1;
+    optional QueryCacheServerAddress server_address = 2;  
+    optional uint64 last_update_ts = 3;   
+}
+
+message GetCacheInfosResp
+{
+    repeated QueryCacheServerAddress server_addresses = 1;  
+    repeated CacheInfoEntry cache_info_entries = 2;
+    optional string exception = 3;
+}
+
 service DaemonManagerService
 {
     rpc GetAllBGThreadServers(GetAllBGThreadServersReq) returns (GetAllBGThreadServersResp);
     rpc GetDMBGJobInfo(GetDMBGJobInfoReq) returns (GetDMBGJobInfoResp);
     rpc ControlDaemonJob(ControlDaemonJobReq) returns (ControlDaemonJobResp);
     rpc ForwardOptimizeQuery(ForwardOptimizeQueryReq) returns (ForwardOptimizeQueryResp);
+    rpc GetCacheInfos(GetCacheInfosReq) returns (GetCacheInfosResp);
 };

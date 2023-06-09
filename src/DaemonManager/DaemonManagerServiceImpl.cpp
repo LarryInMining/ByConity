@@ -41,6 +41,19 @@ void fillDMBGJobInfo(const BGJobInfo & bg_job_data, Protos::DMBGJobInfo & pb)
     pb.set_last_start_time(bg_job_data.last_start_time);
 }
 
+void fillCacheServerAddress(const ServerAddress & address, Protos::QueryCacheServerAddress & pb)
+{
+    pb.set_host(address.host);
+    pb.set_tcp_port(address.tcp_port);
+}
+
+void fillCacheInfoEntry(const UUID & uuid, const ServerAddress & address, const uint64_t last_update_ts, Protos::CacheInfoEntry & pb)
+{
+    fillUUID(uuid, *pb.mutable_uuid());
+    fillCacheServerAddress(address, *pb.mutable_server_address());
+    pb.set_last_update_ts(last_update_ts);
+}
+
 void DaemonManagerServiceImpl:: GetAllBGThreadServers(
         ::google::protobuf::RpcController *,
         const ::DB::Protos::GetAllBGThreadServersReq * request,
@@ -176,5 +189,45 @@ void DaemonManagerServiceImpl::ForwardOptimizeQuery(
     }
 }
 
+void DaemonManagerServiceImpl::GetCacheInfos(
+    ::google::protobuf::RpcController * controller,
+    const ::DB::Protos::GetCacheInfosReq * request,
+    ::DB::Protos::GetCacheInfosResp * response,
+    ::google::protobuf::Closure * done) override
+{
+    brpc::ClosureGuard done_guard(done);
+    try
+    {
+        LOG_INFO( log, "Receive GetCacheInfos RPC request");
+        if (!query_cache_manager)
+            return;
+
+        AllInfo all_info = query_cache_manager->getAllInfo();
+        std::for_each(all_info.alive_servers.begin(), all_info.alive_servers.end(),
+            [&response] (const ServerAddress & address)
+            {
+                fillCacheServerAddress(address, *response->add_server_addresses());
+            }
+        );
+
+        std::for_each(all_info.cache_info.begin(), all_info.cache_info.end()
+            [&response] (const std::unordered_map<UUID, CacheInfo> & map_part)
+            {
+                std::for_each(map_part.begin(), map_part.end(),
+                    [&response] (const std::pair<UUID, CacheInfo> & p)
+                    {
+                        fillCacheInfoEntry(p.first, p.second, *response->add_cache_info_entries());
+                    }
+                );
+            }
+        );
+    }
+    catch (...)
+    {
+        tryLogCurrentException(log, __PRETTY_FUNCTION__);
+        RPCHelpers::handleException(response->mutable_exception());
+    }
 }
+
+} /// end namespace DaemonManager
 }

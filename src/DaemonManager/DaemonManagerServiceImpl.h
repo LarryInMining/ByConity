@@ -25,8 +25,8 @@ class QueryCacheManager;
 class DaemonManagerServiceImpl : public DB::Protos::DaemonManagerService
 {
 public:
-    DaemonManagerServiceImpl(std::unordered_map<CnchBGThreadType, DaemonJobServerBGThreadPtr> daemon_jobs_, QueryCacheManager * /*query_cache_manager_*/)
-        : daemon_jobs(std::move(daemon_jobs_))/*, query_cache_manager{query_cache_manager_}*/
+    DaemonManagerServiceImpl(std::unordered_map<CnchBGThreadType, DaemonJobServerBGThreadPtr> daemon_jobs_, QueryCacheManager * query_cache_manager_)
+        : daemon_jobs(std::move(daemon_jobs_)), query_cache_manager{query_cache_manager_}
     {}
 
     void GetAllBGThreadServers(
@@ -65,10 +65,18 @@ public:
         const ::DB::Protos::SetLastUpdateTimestampReq * request,
         ::DB::Protos::SetLastUpdateTimestampResp * response,
         ::google::protobuf::Closure * done) override;
+
 #endif
+
+    void GetCacheInfos(
+        ::google::protobuf::RpcController * controller,
+        const ::DB::Protos::GetCacheInfosReq * request,
+        ::DB::Protos::GetCacheInfosResp * response,
+        ::google::protobuf::Closure * done) override;
+
 private:
     std::unordered_map<CnchBGThreadType, DaemonJobServerBGThreadPtr> daemon_jobs;
-    //QueryCacheManager * query_cache_manager;
+    QueryCacheManager * query_cache_manager;
     Poco::Logger * log = &Poco::Logger::get("DaemonManagerRPCService");
 };
 
