@@ -16,6 +16,7 @@
 #include <DaemonManager/DaemonManagerServiceImpl.h>
 #include <DaemonManager/DaemonHelper.h>
 #include <CloudServices/CnchBGThreadCommon.h>
+#include <DaemonManager/QueryCacheManager/QueryCacheManager.h>
 #include <Protos/RPCHelpers.h>
 #include <brpc/closure_guard.h>
 #include <brpc/controller.h>
