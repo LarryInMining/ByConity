@@ -48,11 +48,11 @@ void fillCacheServerAddress(const ServerAddress & address, Protos::QueryCacheSer
     pb.set_tcp_port(address.tcp_port);
 }
 
-void fillCacheInfoEntry(const UUID & uuid, const ServerAddress & address, const uint64_t last_update_ts, Protos::CacheInfoEntry & pb)
+void fillCacheInfoEntry(const UUID & uuid, const CacheInfo & cache_info, Protos::CacheInfoEntry & pb)
 {
     RPCHelpers::fillUUID(uuid, *pb.mutable_uuid());
-    fillCacheServerAddress(address, *pb.mutable_server_address());
-    pb.set_last_update_ts(last_update_ts);
+    fillCacheServerAddress(cache_info.address, *pb.mutable_server_address());
+    pb.set_last_update_ts(cache_info.last_update_ts);
 }
 
 void DaemonManagerServiceImpl:: GetAllBGThreadServers(
