@@ -51,7 +51,7 @@ void fillCacheServerAddress(const ServerAddress & address, Protos::QueryCacheSer
 void fillCacheInfoEntry(const UUID & uuid, const CacheInfo & cache_info, Protos::CacheInfoEntry & pb)
 {
     RPCHelpers::fillUUID(uuid, *pb.mutable_uuid());
-    fillCacheServerAddress(cache_info.address, *pb.mutable_server_address());
+    fillCacheServerAddress(cache_info.server_address, *pb.mutable_server_address());
     pb.set_last_update_ts(cache_info.last_update_ts);
 }
 
