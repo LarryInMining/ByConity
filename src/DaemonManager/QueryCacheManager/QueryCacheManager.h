@@ -21,10 +21,13 @@
 #include <mutex>
 #include <array>
 
-namespace DB::DaemonManager
+namespace DB
 {
 
 class HostWithPorts;
+namespace DaemonManager
+{
+
 struct ServerAddress
 {
     String host;
@@ -103,3 +106,5 @@ struct QueryCacheManagerInfos
 };
 
 } /// end namespace
+
+}
