@@ -769,10 +769,13 @@ static std::tuple<ASTPtr, BlockIO> executeQueryImpl(
                 LOG_INFO(&Poco::Logger::get("executeQuery"), "UUIDs:");
                 for (auto & uuid : uuids)
                     LOG_INFO(&Poco::Logger::get("executeQuery"), "UUID {}", UUIDHelpers::UUIDToString(uuid));
-                /*
-                DaemonManagerClientPtr dm_client = context->getDaemonManagerClient();
-                dm_client->getOrInsertQueryCacheInfo();
-                */
+#if 0
+                if (uuids.size() == 1)
+                {
+                    DaemonManagerClientPtr dm_client = context->getDaemonManagerClient();
+                    dm_client->getOrInsertQueryCacheInfo({context->});
+                }
+#endif
 
                 QueryCache::Key key(
                     ast, res.pipeline.getHeader(),
