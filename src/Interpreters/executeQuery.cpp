@@ -754,12 +754,13 @@ static std::tuple<ASTPtr, BlockIO> executeQueryImpl(
             limits.size_limits = SizeLimits(settings.max_result_rows, settings.max_result_bytes, settings.result_overflow_mode);
         }
 
+
+        auto query_cache = context->getQueryCache();
+        bool read_result_from_query_cache = false; /// a query must not read from *and* write to the query cache at the same time
         {
             OpenTelemetrySpanHolder span("IInterpreter::execute()");
             res = interpreter->execute();
 
-            auto query_cache = context->getQueryCache();
-            bool read_result_from_query_cache = false; /// a query must not read from *and* write to the query cache at the same time
             if (query_cache != nullptr
                 && (can_use_query_cache && settings.enable_reads_from_query_cache)
                 && (res.pipeline.getNumStreams() > 0))
@@ -788,35 +789,6 @@ static std::tuple<ASTPtr, BlockIO> executeQueryImpl(
                 }
             }
 
-            /// If
-            /// - it is a SELECT query, and
-            /// - active (write) use of the query cache is enabled
-            /// then add a processor on top of the pipeline which stores the result in the query cache.
-            if (!read_result_from_query_cache
-                && query_cache != nullptr
-                && can_use_query_cache && settings.enable_writes_to_query_cache
-                && (res.pipeline.getNumStreams() > 0)
-                && (!astContainsNonDeterministicFunctions(ast, context) || settings.query_cache_store_results_of_queries_with_nondeterministic_functions))
-            {
-                QueryCache::Key key(
-                    ast, res.pipeline.getHeader(),
-                    context->getUserName(), settings.query_cache_share_between_users,
-                    std::chrono::system_clock::now() + std::chrono::seconds(settings.query_cache_ttl),
-                    settings.query_cache_compress_entries);
-
-                const size_t num_query_runs = query_cache->recordQueryRun(key);
-                if (num_query_runs > settings.query_cache_min_query_runs)
-                {
-                    auto query_cache_writer = std::make_shared<QueryCache::Writer>(query_cache->createWriter(
-                                     key,
-                                     std::chrono::milliseconds(settings.query_cache_min_query_duration.totalMilliseconds()),
-                                     settings.query_cache_squash_partial_results,
-                                     settings.max_block_size,
-                                     settings.query_cache_max_size_in_bytes,
-                                     settings.query_cache_max_entries));
-                    res.pipeline.writeResultIntoQueryCache(query_cache_writer);
-                }
-            }
         }
 
         QueryPipeline & pipeline = res.pipeline;
@@ -886,6 +858,38 @@ static std::tuple<ASTPtr, BlockIO> executeQueryImpl(
                 if (auto * stream = dynamic_cast<CountingBlockOutputStream *>(res.out.get()))
                 {
                     stream->setProcessListElement(context->getProcessListElement());
+                }
+            }
+        }
+
+        {
+            /// If
+            /// - it is a SELECT query, and
+            /// - active (write) use of the query cache is enabled
+            /// then add a processor on top of the pipeline which stores the result in the query cache.
+            if (!read_result_from_query_cache
+                && query_cache != nullptr
+                && can_use_query_cache && settings.enable_writes_to_query_cache
+                && (res.pipeline.getNumStreams() > 0)
+                && (!astContainsNonDeterministicFunctions(ast, context) || settings.query_cache_store_results_of_queries_with_nondeterministic_functions))
+            {
+                QueryCache::Key key(
+                    ast, res.pipeline.getHeader(),
+                    context->getUserName(), settings.query_cache_share_between_users,
+                    std::chrono::system_clock::now() + std::chrono::seconds(settings.query_cache_ttl),
+                    settings.query_cache_compress_entries);
+
+                const size_t num_query_runs = query_cache->recordQueryRun(key);
+                if (num_query_runs > settings.query_cache_min_query_runs)
+                {
+                    auto query_cache_writer = std::make_shared<QueryCache::Writer>(query_cache->createWriter(
+                                     key,
+                                     std::chrono::milliseconds(settings.query_cache_min_query_duration.totalMilliseconds()),
+                                     settings.query_cache_squash_partial_results,
+                                     settings.max_block_size,
+                                     settings.query_cache_max_size_in_bytes,
+                                     settings.query_cache_max_entries));
+                    res.pipeline.writeResultIntoQueryCache(query_cache_writer);
                 }
             }
         }
