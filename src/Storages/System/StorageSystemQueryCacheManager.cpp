@@ -25,7 +25,7 @@
 #include <Storages/SelectQueryInfo.h>
 #include <DaemonManager/DaemonManagerClient.h>
 #include <Common/HostWithPorts.h>
-
+#include <common/logger_useful.h>
 
 namespace DB
 {
@@ -80,10 +80,10 @@ void StorageSystemQueryCacheManager::fillData(MutableColumns & res_columns, Cont
     {
         const DaemonManager::CacheInfo & cache_info = entry.second;
         res_columns[0]->insert(entry.first);
-        res_columns[1]->insert(entry.cache_info.server_address.host);
-        res_columns[2]->insert(entry.cache_info.server_address.tcp_port);
-        res_columns[3]->insert(entry.cache_info.last_update_ts);
-        res_columns[4]->insert((entry.cache_info.last_update_ts >> 18)/ 1000);
+        res_columns[1]->insert(cache_info.server_address.host);
+        res_columns[2]->insert(cache_info.server_address.tcp_port);
+        res_columns[3]->insert(cache_info.last_update_ts);
+        res_columns[4]->insert((cache_info.last_update_ts >> 18)/ 1000);
         res_columns[5]->insert("DaemonManager");
     });
 }
