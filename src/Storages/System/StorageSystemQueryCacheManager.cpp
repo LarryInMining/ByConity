@@ -75,15 +75,15 @@ void StorageSystemQueryCacheManager::fillData(MutableColumns & res_columns, Cont
     DaemonManagerClientPtr client = context->getDaemonManagerClient();
     DaemonManager::QueryCacheManagerInfos cache_infos = client->getQueryCacheInfos();
     LOG_INFO(&Poco::Logger::get("StorageSystemQueryCacheManager"), "alive servers: {}", toString(cache_infos.alive_servers));
-    std::for_each(cache_infos.begin(), cache_infos.end(),
+    std::for_each(cache_infos.cache_infos.begin(), cache_infos.cache_infos.end(),
         [& res_columns] (const std::pair<UUID, DaemonManager::CacheInfo> & entry)
         {
             const DaemonManager::CacheInfo & cache_info = entry.second;
             res_columns[0]->insert(entry.first);
             res_columns[1]->insert(cache_info.server_address.host);
             res_columns[2]->insert(cache_info.server_address.tcp_port);
-            res_columns[3]->insert(cache_info.last_update_ts);
-            res_columns[4]->insert((cache_info.last_update_ts >> 18)/ 1000);
+            res_columns[3]->insert(cache_info.last_update_ts.toUInt64());
+            res_columns[4]->insert((cache_info.last_update_ts.toUInt64() >> 18)/ 1000);
             res_columns[5]->insert("DaemonManager");
         });
 }
