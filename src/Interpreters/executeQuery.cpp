@@ -755,12 +755,12 @@ static std::tuple<ASTPtr, BlockIO> executeQueryImpl(
         }
 
 
-        auto query_cache = context->getQueryCache();
         bool read_result_from_query_cache = false; /// a query must not read from *and* write to the query cache at the same time
         {
             OpenTelemetrySpanHolder span("IInterpreter::execute()");
             res = interpreter->execute();
 
+            auto query_cache = context->getQueryCache();
             if (query_cache != nullptr
                 && (can_use_query_cache && settings.enable_reads_from_query_cache)
                 && (res.pipeline.getNumStreams() > 0))
@@ -867,6 +867,8 @@ static std::tuple<ASTPtr, BlockIO> executeQueryImpl(
             /// - it is a SELECT query, and
             /// - active (write) use of the query cache is enabled
             /// then add a processor on top of the pipeline which stores the result in the query cache.
+
+            auto query_cache = context->getQueryCache();
             if (!read_result_from_query_cache
                 && query_cache != nullptr
                 && can_use_query_cache && settings.enable_writes_to_query_cache
