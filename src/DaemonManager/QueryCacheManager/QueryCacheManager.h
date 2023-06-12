@@ -24,6 +24,7 @@
 namespace DB::DaemonManager
 {
 
+class HostWithPorts;
 struct ServerAddress
 {
     String host;
@@ -34,6 +35,8 @@ inline bool operator == (const ServerAddress & lhs, const ServerAddress & rhs)
 {
     return (lhs.host == rhs.host) && (lhs.tcp_port == rhs.tcp_port);
 }
+
+ServerAddress toServerAddress(const HostWithPorts &);
 
 struct CacheInfo
 {

@@ -760,22 +760,18 @@ static std::tuple<ASTPtr, BlockIO> executeQueryImpl(
             OpenTelemetrySpanHolder span("IInterpreter::execute()");
             res = interpreter->execute();
 
+            const std::vector<UUID> uuids = res.pipeline.getHoldedStorageUUIDs();
             auto query_cache = context->getQueryCache();
             if (query_cache != nullptr
                 && (can_use_query_cache && settings.enable_reads_from_query_cache)
-                && (res.pipeline.getNumStreams() > 0))
+                && (res.pipeline.getNumStreams() > 0) && (!uuids.empty()))
             {
-                const std::vector<UUID> uuids = res.pipeline.getHoldedStorageUUIDs();
                 LOG_INFO(&Poco::Logger::get("executeQuery"), "UUIDs:");
                 for (auto & uuid : uuids)
                     LOG_INFO(&Poco::Logger::get("executeQuery"), "UUID {}", UUIDHelpers::UUIDToString(uuid));
-#if 0
-                if (uuids.size() == 1)
-                {
-                    DaemonManagerClientPtr dm_client = context->getDaemonManagerClient();
-                    dm_client->getOrInsertQueryCacheInfo({context->});
-                }
-#endif
+
+                DaemonManagerClientPtr dm_client = context->getDaemonManagerClient();
+                CacheInfo cache_info = dm_client->getOrInsertQueryCacheInfo(toServerAddress(context->getHostWithPorts()), uuids.front(), context->getCurrentTransactionID());
 
                 QueryCache::Key key(
                     ast, res.pipeline.getHeader(),

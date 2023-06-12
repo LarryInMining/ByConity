@@ -14,6 +14,7 @@
  */
 
 #include <DaemonManager/QueryCacheManager/QueryCacheManager.h>
+#include <Common/HostWithPorts.h>
 
 namespace DB::DaemonManager
 {
@@ -86,6 +87,11 @@ QueryCacheManager::AllInfo QueryCacheManager::getAllInfo() const
         });
 
     return res;
+}
+
+ServerAddress toServerAddress(const HostWithPorts & host_with_port)
+{
+    return ServerAddress{host_with_port.getHost(), host_with_port.getTCPPort()};
 }
 
 }
