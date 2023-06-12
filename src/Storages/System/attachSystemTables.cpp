@@ -119,6 +119,7 @@
 #include <Storages/System/StorageSystemCnchDedupWorkers.h>
 #include <Storages/System/StorageSystemCnchManipulations.h>
 #include <Storages/System/StorageSystemGlobalGCManager.h>
+#include <Storages/System/StorageSystemQueryCacheManager.h>
 #include <Storages/System/StorageSystemDMBGJobs.h>
 #include <Storages/System/StorageSystemPersistentBGJobStatus.h>
 #include <Storages/System/StorageSystemLockMap.h>
@@ -233,6 +234,7 @@ void attachSystemTablesServer(IDatabase & system_database, bool has_zookeeper)
     attach<StorageSystemDMBGJobs>(system_database, "dm_bg_jobs");
     attach<StorageSystemPersistentBGJobStatus>(system_database, "persistent_bg_job_status");
     attach<StorageSystemGlobalGCManager>(system_database, "global_gc_manager");
+    attach<StorageSystemQueryCacheManager>(system_database, "query_cache_manager");
     attach<StorageSystemLockMap>(system_database, "lock_map");
 
     attach<StorageSystemWorkers>(system_database, "workers");

@@ -88,5 +88,23 @@ QueryCacheManager::AllInfo QueryCacheManager::getAllInfo() const
     return res;
 }
 
+String toString(const ServerAddress & server_address)
+{
+    return createHostPortString(server_address.host, server_address.tcp_port);
+}
+
+String toString(const std::vector<ServerAddress> & addresses)
+{
+    String res;
+    char separator = ' ';
+    std::for_each(addresses.begin(), addresses.end(),
+        [&res] (const ServerAddress & s)
+        {
+            res += separator + toString(s);
+        }
+    );
+    return res;
+}
+
 }
 

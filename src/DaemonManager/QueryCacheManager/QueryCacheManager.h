@@ -30,6 +30,9 @@ struct ServerAddress
     UInt16 tcp_port;
 };
 
+String toString(const ServerAddress &);
+String toString(const std::vector<ServerAddress> &);
+
 inline bool operator == (const ServerAddress & lhs, const ServerAddress & rhs)
 {
     return (lhs.host == rhs.host) && (lhs.tcp_port == rhs.tcp_port);
