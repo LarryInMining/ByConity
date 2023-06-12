@@ -654,7 +654,7 @@ void Pipe::readFromQueryCache(
 void Pipe::addQueryCacheTransform(std::shared_ptr<QueryCache::Writer> query_cache_writer)
 {
     if (numOutputPorts() != 1)
-        throw Exception("Cannot add QueryCacheTransform to Pipes because the number of ouput port is not 1",
+        throw Exception("Cannot add QueryCacheTransform to Pipes because the number of ouput port is not 1 {}", numOutputPorts(),
                         ErrorCodes::LOGICAL_ERROR);
 
     /// Attach a special transform to all output ports (result + possibly totals/extremes). The only purpose of the transform is
