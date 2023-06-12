@@ -32,6 +32,8 @@
 #include <Processors/Sources/NullSource.h>
 #include <Columns/ColumnConst.h>
 #include <Processors/QueryPipeline.cpp>
+#include <Storages/IStorage.h>
+
 
 namespace DB
 {
