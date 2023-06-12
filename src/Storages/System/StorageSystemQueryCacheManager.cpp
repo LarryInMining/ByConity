@@ -33,17 +33,17 @@ namespace DB
 namespace
 {
 
-String toString(const ServerAddress & server_address)
+String toString(const DaemonManager::ServerAddress & server_address)
 {
     return createHostPortString(server_address.host, server_address.tcp_port);
 }
 
-String toString(const std::vector<ServerAddress> & addresses)
+String toString(const std::vector<DaemonManager::ServerAddress> & addresses)
 {
     String res;
     char separator = ' ';
     std::for_each(addresses.begin(), addresses.end(),
-        [&res, &separator] (const ServerAddress & s)
+        [&res, &separator] (const DaemonManager::ServerAddress & s)
         {
             res += separator + toString(s);
             separator = ',';
@@ -73,12 +73,12 @@ void StorageSystemQueryCacheManager::fillData(MutableColumns & res_columns, Cont
         return;
 
     DaemonManagerClientPtr client = context->getDaemonManagerClient();
-    QueryCacheManagerInfos cache_info = client->getQueryCacheInfos();
+    DaemonManager::QueryCacheManagerInfos cache_info = client->getQueryCacheInfos();
     LOG_INFO(log, "alive servers: {}", toString(cache_info.alive_servers));
     std::for_each(cache_infos.begin(), cache_infos.end(),
-    [& res_columns] (const std::pair<UUID, CacheInfo> & entry)
+    [& res_columns] (const std::pair<UUID, DaemonManager::CacheInfo> & entry)
     {
-        const CacheInfo & cache_info = entry.second;
+        const DaemonManager::CacheInfo & cache_info = entry.second;
         res_columns[0]->insert(entry.first);
         res_columns[1]->insert(entry.cache_info.server_address.host);
         res_columns[2]->insert(entry.cache_info.server_address.tcp_port);
