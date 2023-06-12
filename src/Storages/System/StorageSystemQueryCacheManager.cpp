@@ -14,6 +14,10 @@
  */
 
 #include <Storages/System/StorageSystemQueryCacheManager.h>
+#include <DaemonManager/QueryCacheManager/QueryCacheManager.h>
+#include <DataTypes/DataTypesNumber.h>
+#include <DataTypes/DataTypeDateTime.h>
+#include <DataTypes/DataTypeString.h>
 #include <Core/NamesAndTypes.h>
 #include <Columns/IColumn.h>
 #include <Interpreters/Context.h>
