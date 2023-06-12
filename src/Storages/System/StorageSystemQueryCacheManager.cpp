@@ -25,37 +25,63 @@
 
 namespace DB
 {
-    NamesAndTypesList StorageSystemQueryCacheManager::getNamesAndTypes()
-    {
-        return
-        {
-            {"uuid", std::make_shared<DataTypeUUID>()},
-            {"host", std::make_shared<DataTypeString>()},
-            {"tcp_port", std::make_shared<DataTypeUInt16>()},
-            {"last_update_ts", std::make_shared<DataTypeUInt64>()},
-            {"readable_last_update_ts", std::make_shared<DataTypeDateTime>()},
-            {"source_of_last_update_ts", std::make_shared<DataTypeString>()}
-        };
-    }
 
-    void StorageSystemQueryCacheManager::fillData(MutableColumns & res_columns, ContextPtr context, const SelectQueryInfo &) const
-    {
-        if (context->getServerType() != ServerType::cnch_server)
-            return;
+namespace
+{
 
-        DaemonManagerClientPtr client = context->getDaemonManagerClient();
-        QueryCacheManagerInfos cache_info = client->getQueryCacheInfos();
-        LOG_INFO(log, "alive servers: {}", toString(cache_info.alive_servers));
-        std::for_each(cache_infos.begin(), cache_infos.end(),
-        [& res_columns] (const std::pair<UUID, CacheInfo> & entry)
+String toString(const ServerAddress & server_address)
+{
+    return createHostPortString(server_address.host, server_address.tcp_port);
+}
+
+String toString(const std::vector<ServerAddress> & addresses)
+{
+    String res;
+    char separator = ' ';
+    std::for_each(addresses.begin(), addresses.end(),
+        [&res, &separator] (const ServerAddress & s)
         {
-            const CacheInfo & cache_info = entry.second;
-            res_columns[0]->insert(entry.first);
-            res_columns[1]->insert(entry.cache_info.server_address.host);
-            res_columns[2]->insert(entry.cache_info.server_address.tcp_port);
-            res_columns[3]->insert(entry.cache_info.last_update_ts);
-            res_columns[4]->insert((entry.cache_info.last_update_ts >> 18)/ 1000);
-            res_columns[5]->insert("DaemonManager");
-        });
-    }
+            res += separator + toString(s);
+            separator = ',';
+        }
+    );
+    return res;
+}
+
+}
+
+NamesAndTypesList StorageSystemQueryCacheManager::getNamesAndTypes()
+{
+    return
+    {
+        {"uuid", std::make_shared<DataTypeUUID>()},
+        {"host", std::make_shared<DataTypeString>()},
+        {"tcp_port", std::make_shared<DataTypeUInt16>()},
+        {"last_update_ts", std::make_shared<DataTypeUInt64>()},
+        {"readable_last_update_ts", std::make_shared<DataTypeDateTime>()},
+        {"source_of_last_update_ts", std::make_shared<DataTypeString>()}
+    };
+}
+
+void StorageSystemQueryCacheManager::fillData(MutableColumns & res_columns, ContextPtr context, const SelectQueryInfo &) const
+{
+    if (context->getServerType() != ServerType::cnch_server)
+        return;
+
+    DaemonManagerClientPtr client = context->getDaemonManagerClient();
+    QueryCacheManagerInfos cache_info = client->getQueryCacheInfos();
+    LOG_INFO(log, "alive servers: {}", toString(cache_info.alive_servers));
+    std::for_each(cache_infos.begin(), cache_infos.end(),
+    [& res_columns] (const std::pair<UUID, CacheInfo> & entry)
+    {
+        const CacheInfo & cache_info = entry.second;
+        res_columns[0]->insert(entry.first);
+        res_columns[1]->insert(entry.cache_info.server_address.host);
+        res_columns[2]->insert(entry.cache_info.server_address.tcp_port);
+        res_columns[3]->insert(entry.cache_info.last_update_ts);
+        res_columns[4]->insert((entry.cache_info.last_update_ts >> 18)/ 1000);
+        res_columns[5]->insert("DaemonManager");
+    });
+}
+
 } // end namespace DB
