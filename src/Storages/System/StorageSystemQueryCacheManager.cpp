@@ -18,12 +18,12 @@
 #include <DataTypes/DataTypesNumber.h>
 #include <DataTypes/DataTypeDateTime.h>
 #include <DataTypes/DataTypeString.h>
+#include <DataTypes/DataTypeUUID.h>
 #include <Core/NamesAndTypes.h>
 #include <Columns/IColumn.h>
 #include <Interpreters/Context.h>
 #include <Storages/SelectQueryInfo.h>
-#include <DataTypes/DataTypeUUID.h>
-#include <CloudServices/CnchServerClient.h>
+#include <DaemonManager/DaemonManagerClient.h>
 #include <Common/HostWithPorts.h>
 
 

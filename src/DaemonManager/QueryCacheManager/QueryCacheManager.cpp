@@ -14,7 +14,6 @@
  */
 
 #include <DaemonManager/QueryCacheManager/QueryCacheManager.h>
-#include <Common/HostWithPorts.h>
 
 namespace DB::DaemonManager
 {
