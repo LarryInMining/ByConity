@@ -142,6 +142,7 @@ public:
     bool hasTotals() const { return pipe.getTotalsPort() != nullptr; }
 
     const Block & getHeader() const { return pipe.getHeader(); }
+    std::vector<UUID> getHoldedStorageUUIDs() const;
 
     void addTableLock(TableLockHolder lock) { pipe.addTableLock(std::move(lock)); }
     void addInterpreterContext(std::shared_ptr<const Context> context) { pipe.addInterpreterContext(std::move(context)); }

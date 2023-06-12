@@ -588,5 +588,10 @@ void QueryPipeline::readFromQueryCache(
     pipe.readFromQueryCache(std::move(source), std::move(source_totals), std::move(source_extremes));
 }
 
+std::vector<UUID> QueryPipeline::getHoldedStorageUUIDs() const
+{
+    return pipe.getHoldedStorageUUIDs();
+}
+
 }
 

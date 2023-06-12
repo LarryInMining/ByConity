@@ -147,6 +147,7 @@ public:
     /// For queries with nested interpreters (i.e. StorageDistributed)
     void addQueryPlan(std::unique_ptr<QueryPlan> plan) { holder.query_plans.emplace_back(std::move(plan)); }
 
+    std::vector<UUID> getHoldedStorageUUIDs() const;
 private:
     /// Destruction order: processors, header, locks, temporary storages, local contexts
 
