@@ -24,6 +24,7 @@
 #include <Common/PODArray.h>
 #include <Common/ThreadProfileEvents.h>
 #include <Common/formatReadable.h>
+#include <Common/HostWithPorts.h>
 #include <Common/typeid_cast.h>
 
 #include <IO/LimitReadBuffer.h>
@@ -771,7 +772,7 @@ static std::tuple<ASTPtr, BlockIO> executeQueryImpl(
                     LOG_INFO(&Poco::Logger::get("executeQuery"), "UUID {}", UUIDHelpers::UUIDToString(uuid));
 
                 DaemonManagerClientPtr dm_client = context->getDaemonManagerClient();
-                CacheInfo cache_info = dm_client->getOrInsertQueryCacheInfo(toServerAddress(context->getHostWithPorts()), uuids.front(), context->getCurrentTransactionID());
+                DaemonManager::CacheInfo cache_info = dm_client->getOrInsertQueryCacheInfo(DaemonManager::toServerAddress(context->getHostWithPorts()), uuids.front(), context->getCurrentTransactionID());
 
                 QueryCache::Key key(
                     ast, res.pipeline.getHeader(),
