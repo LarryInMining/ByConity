@@ -967,7 +967,7 @@ void Pipe::setQuota(const std::shared_ptr<const EnabledQuota> & quota)
 std::vector<UUID> Pipe::getHoldedStorageUUIDs() const
 {
     std::set<UUID> res;
-    std::transform(holder.storage_holders.begin(), holder.storage_holders.end(), std::inserter(res),
+    std::transform(holder.storage_holders.begin(), holder.storage_holders.end(), std::inserter(res, res.end()),
         [] (const StoragePtr & s)
         {
             return s->getStorageUUID();
