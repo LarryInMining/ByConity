@@ -14,6 +14,7 @@
  */
 
 #include <DaemonManager/QueryCacheManager/QueryCacheManager.h>
+#include <Common/HostWithPorts.h>
 
 namespace DB::DaemonManager
 {
@@ -98,9 +99,10 @@ String toString(const std::vector<ServerAddress> & addresses)
     String res;
     char separator = ' ';
     std::for_each(addresses.begin(), addresses.end(),
-        [&res] (const ServerAddress & s)
+        [&res, &separator] (const ServerAddress & s)
         {
             res += separator + toString(s);
+            separator = ',';
         }
     );
     return res;
