@@ -141,7 +141,8 @@ public:
     void addTableLock(TableLockHolder lock) { holder.table_locks.emplace_back(std::move(lock)); }
     /// This methods are from QueryPipeline. Needed to make conversion from pipeline to pipe possible.
     void addInterpreterContext(std::shared_ptr<const Context> context) { holder.interpreter_context.emplace_back(std::move(context)); }
-    void addStorageHolder(StoragePtr storage) { holder.storage_holders.emplace_back(std::move(storage)); }
+    //void addStorageHolder(StoragePtr storage) { holder.storage_holders.emplace_back(std::move(storage)); }
+    void addStorageHolder(StoragePtr storage);
     void addQueryIdHolder(std::shared_ptr<QueryIdHolder> query_id_holder) { holder.query_id_holder = std::move(query_id_holder); }
     void addRuntimeFilterHolder(RuntimeFilterHolder rf_holder) { holder.runtime_filters.emplace_back(std::move(rf_holder)); }
     /// For queries with nested interpreters (i.e. StorageDistributed)

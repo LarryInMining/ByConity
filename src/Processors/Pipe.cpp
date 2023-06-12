@@ -976,4 +976,9 @@ std::vector<UUID> Pipe::getHoldedStorageUUIDs() const
     return res;
 }
 
+void Pipe::addStorageHolder(StoragePtr storage)
+{
+    holder.storage_holders.emplace_back(std::move(storage));
+}
+
 }
