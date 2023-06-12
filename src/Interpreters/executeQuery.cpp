@@ -766,7 +766,7 @@ static std::tuple<ASTPtr, BlockIO> executeQueryImpl(
             {
                 const std::vector<UUID> uuids = res.pipeline.getHoldedStorageUUIDs();
                 for (auto & uuid : uuids)
-                    LOG_INFO(&Poco::Logger::get("executeQuery"), "UUID {}", UUIDToString(uuid));
+                    LOG_INFO(&Poco::Logger::get("executeQuery"), "UUID {}", UUIDHelpers::UUIDToString(uuid));
                 /*
                 DaemonManagerClientPtr dm_client = context->getDaemonManagerClient();
                 dm_client->getOrInsertQueryCacheInfo();
