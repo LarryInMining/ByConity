@@ -8,6 +8,7 @@ pull:
 image:
 	test -f foundationdb-clients-7.1.27-1.el7.x86_64.rpm || curl -L -o foundationdb-clients-7.1.27-1.el7.x86_64.rpm https://github.com/apple/foundationdb/releases/download/7.1.27/foundationdb-clients-7.1.27-1.el7.x86_64.rpm
 	test -f cmake-3.25.3-linux-x86_64.sh || curl -L -o cmake-3.25.3-linux-x86_64.sh https://github.com/Kitware/CMake/releases/download/v3.25.3/cmake-3.25.3-linux-x86_64.sh || chmod +x cmake-3.25.3-linux-x86_64.sh
+	test -f ninja-linux.zip || curl -L -o ninja-linux.zip https://github.com/ninja-build/ninja/releases/download/v1.11.1/ninja-linux.zip
 
 	docker build --network=host -t byconity/byconity-builder-centos .
 
