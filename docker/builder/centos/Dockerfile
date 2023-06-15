@@ -1,6 +1,7 @@
 FROM centos:centos7
 RUN yum update -y && yum makecache
 RUN yum install -y gcc gcc-c++ git  swig  unzip openssh-server  gzip bash  binutils  bzip2 coreutils  diffutils findutils grep hostname ncurses-base passwd perl procps psmisc python3 sed tar tzdata util-linux curl
+RUN yum install -y ninja-build
 WORKDIR /home
 
 COPY foundationdb-clients-7.1.27-1.el7.x86_64.rpm ./
