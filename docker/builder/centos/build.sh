@@ -2,8 +2,8 @@
 set -e
 
 #ccache -s # uncomment to display CCache statistics
-mkdir -p /server/build_docker
-cd /server/build_docker
+mkdir -p /server/build_docker_centos
+cd /server/build_docker_centos
 cmake -G Ninja /server "-DCMAKE_C_COMPILER=$(command -v clang-11)" "-DCMAKE_CXX_COMPILER=$(command -v clang++-11)"
 
 # Set the number of build jobs to the half of number of virtual CPU cores (rounded up).

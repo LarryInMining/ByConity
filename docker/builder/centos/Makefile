@@ -1,6 +1,6 @@
 build: image
 	mkdir -p $(HOME)/.ccache
-	docker run --network=host --rm --workdir /server --volume $(realpath ../..):/server --cap-add=SYS_PTRACE --mount=type=bind,source=$(HOME)/.ccache,destination=/ccache -e CCACHE_DIR=/ccache -it byconity/byconity-builder-centos
+	docker run --network=host --rm --workdir /server --volume $(realpath ../../..):/server --cap-add=SYS_PTRACE --mount=type=bind,source=$(HOME)/.ccache,destination=/ccache -e CCACHE_DIR=/ccache -it byconity/byconity-builder-centos
 
 pull:
 	docker pull byconity/byconity-builder-centos
