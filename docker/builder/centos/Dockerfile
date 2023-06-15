@@ -7,7 +7,7 @@ COPY foundationdb-clients-7.1.27-1.el7.x86_64.rpm ./
 RUN yum localinstall -y foundationdb-clients-7.1.27-1.el7.x86_64.rpm
 
 COPY cmake-3.25.3-linux-x86_64.sh ./
-RUN ./cmake-3.25.3-linux-x86_64.sh --skip-license
+RUN ./cmake-3.25.3-linux-x86_64.sh --skip-license --prefix=/usr/local/
 COPY build.sh /
 CMD ["/bin/bash", "/build.sh"]
 
