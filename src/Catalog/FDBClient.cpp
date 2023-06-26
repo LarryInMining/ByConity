@@ -16,6 +16,7 @@
 #include <cstdint>
 #include <string>
 #include <string.h>
+#include <iostream>
 #include <Catalog/FDBClient.h>
 #include <Catalog/FDBError.h>
 #include <Common/Exception.h>
@@ -399,6 +400,7 @@ bool Iterator::Next(fdb_error_t & code)
             return false;
 
         LOG_DEBUG(&Poco::Logger::get("FDBIterator"), "iteration {}", iteration);
+        std::cout << "iteration " << iteration << '\n';
 
         if (iteration==1)
         {
@@ -424,6 +426,7 @@ bool Iterator::Next(fdb_error_t & code)
             return false;
 
         LOG_DEBUG(&Poco::Logger::get("FDBIterator"), "batch count {}", batch_count);
+        std::cout << "batch count " << batch_count << '\n';
         if (batch_count > 0)
         {
             start_key_batch = std::string(reinterpret_cast<const char *>(batch_kvs[batch_count-1].key), batch_kvs[batch_count-1].key_length);
