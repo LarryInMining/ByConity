@@ -19,6 +19,7 @@
 #include <Catalog/FDBClient.h>
 #include <Catalog/FDBError.h>
 #include <Common/Exception.h>
+#include <common/logger_useful.h>
 
 namespace DB
 {
@@ -397,6 +398,8 @@ bool Iterator::Next(fdb_error_t & code)
         if (iteration > 1 && !has_more)
             return false;
 
+        LOG_DEBUG(&Poco::Logger::get("FDBIterator"), "iteration {}", iteration);
+
         if (iteration==1)
         {
             batch_future = std::make_shared<FDBFutureRAII>(fdb_transaction_get_range(tr->transaction,
@@ -420,6 +423,7 @@ bool Iterator::Next(fdb_error_t & code)
         if (code = fdb_future_get_keyvalue_array(batch_future->future, &batch_kvs, &batch_count, &has_more); code)
             return false;
 
+        LOG_DEBUG(&Poco::Logger::get("FDBIterator"), "batch count {}", batch_count);
         if (batch_count > 0)
         {
             start_key_batch = std::string(reinterpret_cast<const char *>(batch_kvs[batch_count-1].key), batch_kvs[batch_count-1].key_length);
