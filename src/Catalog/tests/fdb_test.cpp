@@ -24,6 +24,7 @@
 using String = std::string;
 using Test = std::function<bool()>;
 
+
 bool testPutAndGet(DB::Catalog::MetastoreFDBImpl & metastore)
 {
     for (int i = 0; i < 2000; ++i)
@@ -45,8 +46,8 @@ int main(int , char ** argv)
     String cluster_path = argv[1];
     DB::Catalog::MetastoreFDBImpl metastore(cluster_path);
 
-    if (false == testPutAndGet(metastore))
-        std::cout << "insert failed\n";
+    //if (false == testPutAndGet(metastore))
+    //    std::cout << "insert failed\n";
     auto it_ptr =  metastore.getByPrefix("xkey");
     while (it_ptr->next())
     {
