@@ -407,14 +407,14 @@ bool Iterator::Next(fdb_error_t & code)
             batch_future = std::make_shared<FDBFutureRAII>(fdb_transaction_get_range(tr->transaction,
                 FDB_KEYSEL_FIRST_GREATER_OR_EQUAL(reinterpret_cast<const uint8_t*>(start_key_batch.c_str()), start_key_batch.size()),
                 FDB_KEYSEL_FIRST_GREATER_OR_EQUAL(reinterpret_cast<const uint8_t*>(req.end_key.c_str()), req.end_key.size()),
-                req.row_limit, 0, FDB_STREAMING_MODE_ITERATOR, iteration, 1, req.reverse_order));
+                req.row_limit, 0, FDB_STREAMING_MODE_LARGE, iteration, 1, req.reverse_order));
         }
         else
         {
             batch_future = std::make_shared<FDBFutureRAII>(fdb_transaction_get_range(tr->transaction,
                 FDB_KEYSEL_FIRST_GREATER_THAN(reinterpret_cast<const uint8_t*>(start_key_batch.c_str()), start_key_batch.size()),
                 FDB_KEYSEL_FIRST_GREATER_OR_EQUAL(reinterpret_cast<const uint8_t*>(req.end_key.c_str()), req.end_key.size()),
-                req.row_limit, 0, FDB_STREAMING_MODE_ITERATOR, iteration, 1, req.reverse_order));
+                req.row_limit, 0, FDB_STREAMING_MODE_LARGE, iteration, 1, req.reverse_order));
         }
 
         code = fdb_future_block_until_ready(batch_future->future);
