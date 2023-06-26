@@ -429,6 +429,10 @@ bool Iterator::Next(fdb_error_t & code)
             start_key_batch = std::string(reinterpret_cast<const char *>(batch_kvs[batch_count-1].key), batch_kvs[batch_count-1].key_length);
             iteration++;
             batch_read_index = 1;
+            for (int i = 0; i < batch_count; ++i)
+            {
+                LOG_DEBUG(&Poco::Logger::get("FDBIterator"), "key {} : {}", i, std::string(reinterpret_cast<const char *>(batch_kvs[batch_count-1].key), batch_kvs[batch_count-1].key_length));
+            }
             return true;
         }
         else
