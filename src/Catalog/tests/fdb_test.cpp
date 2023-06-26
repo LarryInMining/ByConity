@@ -28,7 +28,7 @@ bool testPutAndGet(DB::Catalog::MetastoreFDBImpl & metastore)
 {
     for (int i = 0; i < 2000; ++i)
     {
-        string key = "xkey" + to_string(i);
+        std::string key = "xkey" + std::to_string(i);
         metastore.put(key.c_str(), "value1");
         String value;
         metastore.get(key.c_str(), value);
