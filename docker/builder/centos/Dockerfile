@@ -25,6 +25,7 @@ RUN tar -xf llvm-project-11.1.0.src.tar.xz && source /opt/rh/devtoolset-7/enable
 COPY build.sh /
 RUN rm -rf ninja-linux.zip foundationdb-clients-7.1.27-1.el7.x86_64.rpm cmake-3.25.3-linux-x86_64.sh llvm-project-11.1.0.src.tar.xz llvm-project-11.1.0.src
 
-RUN yum -y install ccache
+RUN yum -y install dnf
+RUN yum -y install ccache dpkg
 CMD ["/bin/bash", "/build.sh"]
 
