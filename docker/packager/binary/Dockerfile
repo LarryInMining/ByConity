@@ -2,8 +2,8 @@
 # docker build -t byconity/binary-builder .
 FROM byconity/byconity-builder-centos
 RUN yum install -y curl
-ENV CC=clang-11
-ENV CXX=clang++-11
+ENV CC=clang
+ENV CXX=clang++
 
 # Architecture of the image when BuildKit/buildx is used
 ARG TARGETARCH

@@ -121,7 +121,7 @@ def parse_env_variables(
     cmake_flags = ["$CMAKE_FLAGS"]
     build_target = "clickhouse-bundle"
 
-    cc = "clang-11"
+    cc = "clang"
     result.append("DEB_ARCH=amd64")
 
     cxx = cc.replace("gcc", "g++").replace("clang", "clang++")
@@ -135,8 +135,8 @@ def parse_env_variables(
 
     result.append(f"CC={cc}")
     result.append(f"CXX={cxx}")
-    cmake_flags.append(f"-DCMAKE_C_COMPILER={cc}")
-    cmake_flags.append(f"-DCMAKE_CXX_COMPILER={cxx}")
+    cmake_flags.append(f"-DCMAKE_C_COMPILER=$(command -v {cc})")
+    cmake_flags.append(f"-DCMAKE_CXX_COMPILER=$(command -v {cxx})")
 
     if build_type:
         result.append(f"BUILD_TYPE={build_type.capitalize()}")
