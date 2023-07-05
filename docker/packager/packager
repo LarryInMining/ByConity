@@ -121,10 +121,7 @@ def parse_env_variables(
     cmake_flags = ["$CMAKE_FLAGS"]
     build_target = "clickhouse-bundle"
 
-    cc = "clang"
     result.append("DEB_ARCH=amd64")
-
-    cxx = cc.replace("gcc", "g++").replace("clang", "clang++")
 
     if package_type == "deb":
         # NOTE: This are the env for packages/build script
@@ -132,11 +129,6 @@ def parse_env_variables(
         cmake_flags.append("-DCMAKE_INSTALL_PREFIX=/usr")
         cmake_flags.append("-DCMAKE_INSTALL_SYSCONFDIR=/etc")
         cmake_flags.append("-DCMAKE_INSTALL_LOCALSTATEDIR=/var")
-
-    result.append(f"CC={cc}")
-    result.append(f"CXX={cxx}")
-    cmake_flags.append(f"-DCMAKE_C_COMPILER=$(command -v {cc})")
-    cmake_flags.append(f"-DCMAKE_CXX_COMPILER=$(command -v {cxx})")
 
     if build_type:
         result.append(f"BUILD_TYPE={build_type.capitalize()}")
