@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -x -e
 
-exec &> >(ts)
+# exec &> >(ts)
 
 export CCACHE_DIR=/ccache
 
